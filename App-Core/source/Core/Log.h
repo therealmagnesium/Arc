@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define INFO(message, ...) Arc::Core::Log("Info: ", message, Arc::Core::TextColor::Green, ##__VA_ARGS__)
-#define WARN(message, ...) Arc::Core::Log("Warn: ", message, Arc::Core::TextColor::Yellow, ##__VA_ARGS__)
-#define ERROR(message, ...) Arc::Core::Log("Error: ", message, Arc::Core::TextColor::LightRed, ##__VA_ARGS__)
-#define FATAL(message, ...) Arc::Core::Log("Fatal: ", message, Arc::Core::TextColor::Red, ##__VA_ARGS__)
+#define INFO(message, ...) Arc::Core::Log("Info:", message, Arc::Core::TextColor::Green, ##__VA_ARGS__)
+#define WARN(message, ...) Arc::Core::Log("Warn:", message, Arc::Core::TextColor::Yellow, ##__VA_ARGS__)
+#define ERROR(message, ...) Arc::Core::Log("Error:", message, Arc::Core::TextColor::LightRed, ##__VA_ARGS__)
+#define FATAL(message, ...) Arc::Core::Log("Fatal:", message, Arc::Core::TextColor::Red, ##__VA_ARGS__)
 #define ASSERT(expression, message, ...)                                                                               \
     {                                                                                                                  \
         if (!(expression))                                                                                             \
