@@ -28,6 +28,7 @@ namespace Arc
 
             SDL_GL_SetSwapInterval(1);
 
+            INFO("Window \"%s\" was successfully created", window.title.c_str());
             return window;
         }
 
@@ -49,6 +50,7 @@ namespace Arc
 
         void DestroyWindow(Window& window)
         {
+            INFO("Destroying window \"%s...\"", window.title.c_str());
             SDL_DestroyWindow(window.handle);
         }
 

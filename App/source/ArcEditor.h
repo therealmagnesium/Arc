@@ -3,6 +3,14 @@
 
 using namespace Arc;
 using namespace Arc::Core;
+using namespace Arc::Graphics;
+
+struct ArcEditorState
+{
+    VertexArray vao;
+    VertexBuffer vbo;
+    IndexBuffer ebo;
+};
 
 void ArcEditor_OnCreate();
 void ArcEditor_OnUpdate();

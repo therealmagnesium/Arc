@@ -2,6 +2,8 @@
 #include "Core/Base.h"
 #include "Core/Log.h"
 
+#include "Graphics/RenderCommand.h"
+
 #include <glad/glad.h>
 #include <SDL3/SDL_init.h>
 
@@ -45,9 +47,7 @@ namespace Arc
 
                 state.app->OnUpdate();
 
-                glClearColor(0.8f, 0.8f, 0.8f, 1.f);
-                glClear(GL_COLOR_BUFFER_BIT);
-
+                Graphics::RenderCommand::Clear(0.8f, 0.8f, 0.8f);
                 state.app->OnRender();
 
                 Graphics::DisplayWindow(state.window);
