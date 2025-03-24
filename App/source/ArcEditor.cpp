@@ -11,6 +11,7 @@ void ArcEditor_OnCreate()
     state.vao = CreateVertexArray();
     state.vbo = CreateVertexBuffer();
     state.ebo = CreateIndexBuffer();
+    state.shader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
 
     float vertices[] = {
         -0.5f, 0.5f,  0.f, // v0
@@ -44,6 +45,8 @@ void ArcEditor_OnUpdate()
 }
 void ArcEditor_OnRender()
 {
+    state.shader.Bind();
+
     state.vao.Bind();
     state.ebo.Bind();
 
@@ -53,10 +56,13 @@ void ArcEditor_OnRender()
 
     state.ebo.Unbind();
     state.vao.Unbind();
+
+    state.shader.Unbind();
 }
 
 void ArcEditor_OnShutdown()
 {
+    UnloadShader(state.shader);
     DestroyVertexBuffer(state.vbo);
     DestroyVertexArray(state.vao);
 }

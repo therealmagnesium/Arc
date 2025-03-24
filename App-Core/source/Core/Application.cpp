@@ -31,8 +31,6 @@ namespace Arc
             state.window =
                 Graphics::CreateWindow(app->config.windowWidth, app->config.windowHeight, app->config.name.c_str());
 
-            gladLoadGL();
-
             state.app->OnCreate();
 
             isInitialized = true;
@@ -47,7 +45,7 @@ namespace Arc
 
                 state.app->OnUpdate();
 
-                Graphics::RenderCommand::Clear(0.8f, 0.8f, 0.8f);
+                Graphics::RenderCommand::Clear(0.1f, 0.1f, 0.1f);
                 state.app->OnRender();
 
                 Graphics::DisplayWindow(state.window);

@@ -4,6 +4,7 @@
 
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_video.h>
+#include <glad/glad.h>
 
 namespace Arc
 {
@@ -19,6 +20,7 @@ namespace Arc
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+            SDL_GL_SetSwapInterval(1);
 
             window.handle = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL);
             ASSERT(window.handle != NULL, "Could not create the window!");
@@ -26,9 +28,13 @@ namespace Arc
             window.context = SDL_GL_CreateContext(window.handle);
             ASSERT(window.context != NULL, "Could not create the window's OpenGL context!");
 
-            SDL_GL_SetSwapInterval(1);
+            gladLoadGL();
 
-            INFO("Window \"%s\" was successfully created", window.title.c_str());
+            INFO("Window \"%s\" was successfully created with an OpenGL context", window.title.c_str());
+            INFO("GPU vendor: %s", glGetString(GL_VENDOR));
+            INFO("GPU specs: %s", glGetString(GL_RENDERER));
+            INFO("OpenGL version: %s", glGetString(GL_VERSION));
+
             return window;
         }
 
@@ -50,7 +56,7 @@ namespace Arc
 
         void DestroyWindow(Window& window)
         {
-            INFO("Destroying window \"%s...\"", window.title.c_str());
+            INFO("Destroying window \"%s\"...", window.title.c_str());
             SDL_DestroyWindow(window.handle);
         }
 

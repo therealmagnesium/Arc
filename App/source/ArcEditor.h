@@ -10,6 +10,7 @@ struct ArcEditorState
     VertexArray vao;
     VertexBuffer vbo;
     IndexBuffer ebo;
+    Shader shader;
 };
 
 void ArcEditor_OnCreate();
