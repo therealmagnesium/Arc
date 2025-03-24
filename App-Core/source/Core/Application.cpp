@@ -2,6 +2,9 @@
 #include "Core/Base.h"
 #include "Core/Log.h"
 
+#include <glad/glad.h>
+#include <SDL3/SDL_init.h>
+
 namespace Arc
 {
     namespace Core
@@ -20,20 +23,45 @@ namespace Arc
             state.isRunning = true;
             state.app = app;
 
+            bool isSDLLoaded = SDL_Init(SDL_INIT_VIDEO);
+            ASSERT(isSDLLoaded, "Failed to initialize SDL3!");
+
+            state.window =
+                Graphics::CreateWindow(app->config.windowWidth, app->config.windowHeight, app->config.name.c_str());
+
+            gladLoadGL();
+
             state.app->OnCreate();
 
             isInitialized = true;
+            INFO("Successfully created the application");
         }
 
         void RunApplication()
         {
             while (state.isRunning)
             {
+                Graphics::HandleWindowEvents(state.window);
+
                 state.app->OnUpdate();
+
+                glClearColor(0.8f, 0.8f, 0.8f, 1.f);
+                glClear(GL_COLOR_BUFFER_BIT);
+
                 state.app->OnRender();
+
+                Graphics::DisplayWindow(state.window);
             }
 
             state.app->OnShutdown();
+            Graphics::DestroyWindow(state.window);
+            SDL_Quit();
+        }
+
+        void QuitApplication()
+        {
+            INFO("Quitting the application...");
+            state.isRunning = false;
         }
     }
 }

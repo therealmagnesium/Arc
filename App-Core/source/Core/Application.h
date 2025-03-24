@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Base.h"
+#include "Graphics/Window.h"
 #include <string>
 
 namespace Arc
@@ -28,10 +29,12 @@ namespace Arc
         {
             bool isRunning = false;
             double lastTime = 0.0;
+            Graphics::Window window;
             Application* app = NULL;
         };
 
         void SetupApplication(Application* app);
         void RunApplication();
+        void QuitApplication();
     }
 }

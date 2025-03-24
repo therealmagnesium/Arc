@@ -10,32 +10,34 @@ targetdir("../bin/" .. outputdir .. "/%{prj.name}")
 objdir("../build/" .. outputdir .. "/%{prj.name}")
 
 files({
-    "source/**.h",
-    "source/**.cpp",
+	"source/**.h",
+	"source/**.cpp",
 })
 
 includedirs({
-    "source",
-    "../vendor/glm",
-    "../vendor/glad/include",
-    "../vendor/SDL/include",
+	"source",
+	"../vendor/glm",
+	"../vendor/glad/include",
+	"../vendor/SDL/include",
 })
 
 links({
-    "SDL3",
+	"glad",
+	"SDL3",
 })
 
 filter("system:linux")
 libdirs({
-    "../vendor/SDL/lib/linux",
+	"../vendor/glad/lib/linux",
+	"../vendor/SDL/lib/linux",
 })
 defines({
-    "PLATFORM_LINUX",
+	"PLATFORM_LINUX",
 })
 
 filter("system:windows")
 defines({
-    "PLATFORM_WINDOWS",
+	"PLATFORM_WINDOWS",
 })
 
 filter({ "configurations:Debug" })

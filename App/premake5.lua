@@ -10,39 +10,41 @@ targetdir("../bin/" .. outputdir .. "/%{prj.name}")
 objdir("../build/" .. outputdir .. "/%{prj.name}")
 
 files({
-    "source/**.h",
-    "source/**.cpp",
+	"source/**.h",
+	"source/**.cpp",
 })
 
 includedirs({
-    "../App-Core/source",
-    "../vendor/glm",
-    "../vendor/glad/include",
-    "../vendor/SDL/include",
+	"../App-Core/source",
+	"../vendor/glm",
+	"../vendor/glad/include",
+	"../vendor/SDL/include",
 })
 
 links({
-    "App-Core",
-    "SDL3",
+	"App-Core",
+	"glad",
+	"SDL3",
 })
 
 postbuildcommands({
-    "cp -r assets/ %{cfg.buildtarget.directory}",
-    --"cp -r scenes/ %{cfg.buildtarget.directory}",
-    --"cp ../imgui.ini %{cfg.buildtarget.directory}",
+	"cp -r assets/ %{cfg.buildtarget.directory}",
+	--"cp -r scenes/ %{cfg.buildtarget.directory}",
+	--"cp ../imgui.ini %{cfg.buildtarget.directory}",
 })
 
 filter("system:linux")
 libdirs({
-    "../vendor/SDL/lib/linux",
+	"../vendor/glad/lib/linux",
+	"../vendor/SDL/lib/linux",
 })
 defines({
-    "PLATFORM_LINUX",
+	"PLATFORM_LINUX",
 })
 
 filter("system:windows")
 defines({
-    "PLATFORM_WINDOWS",
+	"PLATFORM_WINDOWS",
 })
 
 filter("configurations:Debug")
