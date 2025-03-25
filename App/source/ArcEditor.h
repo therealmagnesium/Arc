@@ -8,10 +8,7 @@ using namespace Arc::Graphics;
 struct ArcEditorState
 {
     Camera camera;
-    VertexArray vao;
-    VertexBuffer vbo;
-    IndexBuffer ebo;
-    Shader shader;
+    Mesh mesh;
 };
 
 void ArcEditor_OnCreate();

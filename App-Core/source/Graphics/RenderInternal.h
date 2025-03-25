@@ -1,10 +1,17 @@
 #pragma once
 #include "Core/Base.h"
+#include <glm/glm.hpp>
 
 namespace Arc
 {
     namespace Graphics
     {
+        struct Vertex
+        {
+            glm::vec3 position;
+            glm::vec2 uvCoord;
+        };
+
         struct VertexArray
         {
             u32 id = 0;
@@ -22,7 +29,7 @@ namespace Arc
 
             void Bind();
             void Unbind();
-            void SendData(float* vertices, u32 vertexCount);
+            void SendData(Vertex* vertices, u32 vertexCount);
         };
 
         struct IndexBuffer

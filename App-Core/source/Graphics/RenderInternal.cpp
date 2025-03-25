@@ -64,7 +64,7 @@ namespace Arc
         void VertexArray::SetAttribLoc(u32 location, u32 elementCount, u32 offset)
         {
             if (isSelected)
-                glVertexAttribPointer(location, elementCount, GL_FLOAT, false, 3 * sizeof(float), (void*)(u64)offset);
+                glVertexAttribPointer(location, elementCount, GL_FLOAT, false, sizeof(Vertex), (void*)(u64)offset);
         }
 
         void VertexBuffer::Bind()
@@ -79,10 +79,10 @@ namespace Arc
             isSelected = false;
         }
 
-        void VertexBuffer::SendData(float* vertices, u32 vertexCount)
+        void VertexBuffer::SendData(Vertex* vertices, u32 vertexCount)
         {
             if (isSelected)
-                glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float), vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(Vertex), vertices, GL_STATIC_DRAW);
         }
 
         void IndexBuffer::Bind()
