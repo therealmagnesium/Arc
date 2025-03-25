@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Base.h"
 #include "Graphics/Window.h"
+
+#include <glm/glm.hpp>
 #include <string>
 
 namespace Arc
@@ -29,13 +31,17 @@ namespace Arc
         {
             bool isRunning = false;
             double lastTime = 0.0;
-            Graphics::Window window;
-            Application* app = NULL;
+            glm::vec3 clearColor = glm::vec3(1.f);
+            Application* handle = NULL;
         };
 
-        ApplicationConfig& GetApplicationInfo();
         void SetupApplication(Application* app);
         void RunApplication();
         void QuitApplication();
+
+        ApplicationConfig& GetApplicationInfo();
+        void SetClearColor(float r, float g, float b);
+
+        extern ApplicationState* App;
     }
 }

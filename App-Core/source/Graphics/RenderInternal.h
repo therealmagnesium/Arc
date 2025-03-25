@@ -40,7 +40,7 @@ namespace Arc
         IndexBuffer CreateIndexBuffer();
         void DestroyVertexArray(VertexArray& vao);
         void DestroyVertexBuffer(VertexBuffer& vbo);
-        void DestroyIndexBuffer(VertexBuffer& vbo);
+        void DestroyIndexBuffer(IndexBuffer& vbo);
 
     }
 }

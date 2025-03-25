@@ -10,6 +10,8 @@ static ArcEditorState state;
 
 void ArcEditor_OnCreate()
 {
+    SetClearColor(0.1f, 0.1f, 0.1f);
+
     state.vao = CreateVertexArray();
     state.vbo = CreateVertexBuffer();
     state.ebo = CreateIndexBuffer();
@@ -24,6 +26,7 @@ void ArcEditor_OnCreate()
     state.camera.up = glm::vec3(0.f, 1.f, 0.f);
     state.camera.moveSpeed = 0.1f;
     state.camera.lookSensitivity = 3.5f;
+    Renderer->primaryCamera = &state.camera;
 
     float vertices[] = {
         -0.5f, 0.5f,  0.f, // v0
@@ -54,13 +57,8 @@ void ArcEditor_OnCreate()
 
 void ArcEditor_OnUpdate()
 {
-    const ApplicationConfig& config = GetApplicationInfo();
-
     if (IsKeyPressed(KEY_ESCAPE))
         QuitApplication();
-
-    UpdateCamera(state.camera);
-    state.projection = glm::perspective(45.f, config.windowWidth / (float)config.windowHeight, 0.1f, 300.f);
 }
 
 void ArcEditor_OnRender()
@@ -68,8 +66,8 @@ void ArcEditor_OnRender()
     state.shader.Bind();
 
     state.shader.SetVec3("tint", glm::vec3(0.2f, 0.6f, 0.8f));
-    state.shader.SetMat4("viewMatrix", state.camera.view);
-    state.shader.SetMat4("projectionMatrix", state.projection);
+    state.shader.SetMat4("viewMatrix", Renderer->primaryCamera->view);
+    state.shader.SetMat4("projectionMatrix", Renderer->projection);
 
     state.vao.Bind();
     state.ebo.Bind();
@@ -87,6 +85,7 @@ void ArcEditor_OnRender()
 void ArcEditor_OnShutdown()
 {
     UnloadShader(state.shader);
+    DestroyIndexBuffer(state.ebo);
     DestroyVertexBuffer(state.vbo);
     DestroyVertexArray(state.vao);
 }

@@ -2,6 +2,7 @@
 #include "Core/Log.h"
 
 #include "Graphics/RenderCommand.h"
+#include "Graphics/Renderer.h"
 
 #include <glad/glad.h>
 #include <SDL3/SDL_init.h>
@@ -12,11 +13,7 @@ namespace Arc
     {
         static bool isInitialized = false;
         static ApplicationState state;
-
-        ApplicationConfig& GetApplicationInfo()
-        {
-            return state.app->config;
-        }
+        ApplicationState* App = NULL;
 
         void SetupApplication(Application* app)
         {
@@ -26,16 +23,12 @@ namespace Arc
                 return;
             }
 
+            App = &state;
+
             state.isRunning = true;
-            state.app = app;
+            state.handle = app;
 
-            bool isSDLLoaded = SDL_Init(SDL_INIT_VIDEO);
-            ASSERT(isSDLLoaded, "Failed to initialize SDL3!");
-
-            state.window =
-                Graphics::CreateWindow(app->config.windowWidth, app->config.windowHeight, app->config.name.c_str());
-
-            state.app->OnCreate();
+            Graphics::RendererInit();
 
             isInitialized = true;
             INFO("%s", "Successfully created the application");
@@ -43,27 +36,40 @@ namespace Arc
 
         void RunApplication()
         {
+            state.handle->OnCreate();
+
             while (state.isRunning)
             {
-                Graphics::HandleWindowEvents(state.window);
+                Graphics::HandleWindowEvents(Graphics::Renderer->window);
 
-                state.app->OnUpdate();
+                state.handle->OnUpdate();
 
-                Graphics::RenderCommand::Clear(0.1f, 0.1f, 0.1f);
-                state.app->OnRender();
+                Graphics::RendererBegin();
 
-                Graphics::DisplayWindow(state.window);
+                Graphics::RendererClear(V3_OPEN(state.clearColor));
+                state.handle->OnRender();
+
+                Graphics::RendererEnd();
             }
 
-            state.app->OnShutdown();
-            Graphics::DestroyWindow(state.window);
-            SDL_Quit();
+            state.handle->OnShutdown();
+            Graphics::RendererShutdown();
         }
 
         void QuitApplication()
         {
             INFO("%s", "Quitting the application...");
             state.isRunning = false;
+        }
+
+        ApplicationConfig& GetApplicationInfo()
+        {
+            return state.handle->config;
+        }
+
+        void SetClearColor(float r, float g, float b)
+        {
+            state.clearColor = glm::vec3(r, g, b);
         }
     }
 }
