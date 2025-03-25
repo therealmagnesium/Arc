@@ -13,6 +13,11 @@ namespace Arc
         static bool isInitialized = false;
         static ApplicationState state;
 
+        ApplicationConfig& GetApplicationInfo()
+        {
+            return state.app->config;
+        }
+
         void SetupApplication(Application* app)
         {
             if (isInitialized)

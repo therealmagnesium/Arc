@@ -6,6 +6,7 @@
 #include "Core/KeyCodes.h"
 #include "Core/Log.h"
 
+#include "Graphics/Camera.h"
 #include "Graphics/RenderCommand.h"
 #include "Graphics/RenderInternal.h"
 #include "Graphics/Shader.h"

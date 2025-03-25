@@ -1,5 +1,6 @@
 #include "ArcEditor.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace Arc;
 using namespace Arc::Core;
@@ -15,6 +16,14 @@ void ArcEditor_OnCreate()
 
     state.shader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
     state.shader.CreateUniform("tint");
+    state.shader.CreateUniform("viewMatrix");
+    state.shader.CreateUniform("projectionMatrix");
+
+    state.camera.position = glm::vec3(0.f, 0.f, 3.f);
+    state.camera.target = glm::vec3(0.f);
+    state.camera.up = glm::vec3(0.f, 1.f, 0.f);
+    state.camera.moveSpeed = 0.1f;
+    state.camera.lookSensitivity = 3.5f;
 
     float vertices[] = {
         -0.5f, 0.5f,  0.f, // v0
@@ -45,6 +54,13 @@ void ArcEditor_OnCreate()
 
 void ArcEditor_OnUpdate()
 {
+    const ApplicationConfig& config = GetApplicationInfo();
+
+    if (IsKeyPressed(KEY_ESCAPE))
+        QuitApplication();
+
+    UpdateCamera(state.camera);
+    state.projection = glm::perspective(45.f, config.windowWidth / (float)config.windowHeight, 0.1f, 300.f);
 }
 
 void ArcEditor_OnRender()
@@ -52,6 +68,8 @@ void ArcEditor_OnRender()
     state.shader.Bind();
 
     state.shader.SetVec3("tint", glm::vec3(0.2f, 0.6f, 0.8f));
+    state.shader.SetMat4("viewMatrix", state.camera.view);
+    state.shader.SetMat4("projectionMatrix", state.projection);
 
     state.vao.Bind();
     state.ebo.Bind();

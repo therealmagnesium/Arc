@@ -118,5 +118,11 @@ namespace Arc
                 glUniform4fv(uniforms[name], 1, glm::value_ptr(value));
         }
 
+        void Shader::SetMat4(const char* name, const glm::mat4& value)
+        {
+            if (uniforms.find(name) != uniforms.end())
+                glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(value));
+        }
+
     }
 }

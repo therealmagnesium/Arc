@@ -33,6 +33,7 @@ namespace Arc
             Application* app = NULL;
         };
 
+        ApplicationConfig& GetApplicationInfo();
         void SetupApplication(Application* app);
         void RunApplication();
         void QuitApplication();
