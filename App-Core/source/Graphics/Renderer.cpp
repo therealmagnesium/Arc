@@ -39,6 +39,8 @@ namespace Arc
             state.defaultShader.CreateUniform("projectionMatrix");
             state.primaryShader = &state.defaultShader;
 
+            glEnable(GL_DEPTH_TEST);
+
             isInitialized = true;
             INFO("%s", "The renderer was successfully initialized");
         }

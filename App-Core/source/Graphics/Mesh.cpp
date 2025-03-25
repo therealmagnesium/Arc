@@ -64,6 +64,52 @@ namespace Arc
             return mesh;
         }
 
+        Mesh GenMeshCube()
+        {
+            Vertex vertices[] = {
+                // Front
+                {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 1.f)},  // v0
+                {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f)}, // v1
+                {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f)},  // v2
+                {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f)},   // v3
+
+                // Back
+                {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f)},  // v0
+                {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f)}, // v1
+                {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 0.f)},  // v2
+                {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f)},   // v3
+            };
+
+            u32 indices[] = {
+                // Front
+                0, 1, 2, // i0
+                2, 3, 0, // i1
+
+                // Left
+                0, 4, 5, // i0
+                5, 1, 0, // i1
+
+                // Right
+                3, 7, 6, // i0
+                6, 2, 3, // i1
+
+                // Back
+                4, 5, 6, // i0
+                6, 7, 4, // i1
+
+                // Top
+                0, 4, 7, // i0
+                7, 3, 0, // i1
+
+                // Bottom
+                1, 5, 6, // i0
+                6, 2, 1, // i1
+            };
+
+            Mesh mesh = CreateMesh(vertices, LEN(vertices), indices, LEN(indices));
+            return mesh;
+        }
+
         void UnloadMesh(Mesh& mesh)
         {
             DestroyIndexBuffer(mesh.indexBuffer);

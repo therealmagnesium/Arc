@@ -16,10 +16,10 @@ void ArcEditor_OnCreate()
     state.camera.target = glm::vec3(0.f);
     state.camera.up = glm::vec3(0.f, 1.f, 0.f);
     state.camera.moveSpeed = 0.1f;
-    state.camera.lookSensitivity = 3.5f;
+    state.camera.lookSensitivity = 5.f;
     SetPrimaryCamera(&state.camera);
 
-    state.mesh = GenMeshQuad();
+    state.mesh = GenMeshCube();
 }
 
 void ArcEditor_OnUpdate()
