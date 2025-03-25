@@ -13,12 +13,12 @@ namespace Arc
     {
         glm::vec3 Camera::GetViewDirection()
         {
-            return -glm::transpose(view)[2];
+            return glm::normalize(-glm::transpose(view)[2]);
         }
 
         glm::vec3 Camera::GetRightVector()
         {
-            return glm::transpose(view)[0];
+            return glm::normalize(glm::transpose(view)[0]);
         }
 
         void UpdateCamera(Camera& camera)

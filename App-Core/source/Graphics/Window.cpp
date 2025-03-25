@@ -1,4 +1,6 @@
 #include "Graphics/Window.h"
+#include "Graphics/RenderCommand.h"
+
 #include "Core/Application.h"
 #include "Core/Input.h"
 #include "Core/Log.h"
@@ -23,7 +25,7 @@ namespace Arc
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
             SDL_GL_SetSwapInterval(1);
 
-            window.handle = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL);
+            window.handle = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
             ASSERT(window.handle != NULL, "Could not create the window!");
 
             window.context = SDL_GL_CreateContext(window.handle);
@@ -85,6 +87,19 @@ namespace Arc
                         Core::Input.mouse.buttonsClicked[event.button.button] = false;
                         Core::Input.mouse.buttonsHeld[event.button.button] = false;
                         break;
+
+                    case SDL_EVENT_WINDOW_RESIZED:
+                    {
+                        Core::ApplicationConfig& config = Core::GetApplicationInfo();
+
+                        window.width = event.window.data1;
+                        window.height = event.window.data2;
+                        config.windowWidth = window.width;
+                        config.windowHeight = window.height;
+
+                        RenderCommand::SetViewport(window.width, window.height);
+                        // INFO("Resized window \"%s\" to %dx%d", window.title.c_str(), window.width, window.height);
+                    }
                 }
             }
         }

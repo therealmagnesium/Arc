@@ -15,7 +15,7 @@ void ArcEditor_OnCreate()
     state.camera.position = glm::vec3(0.f, 0.f, 3.f);
     state.camera.target = glm::vec3(0.f);
     state.camera.up = glm::vec3(0.f, 1.f, 0.f);
-    state.camera.moveSpeed = 0.1f;
+    state.camera.moveSpeed = 0.25f;
     state.camera.lookSensitivity = 5.f;
     SetPrimaryCamera(&state.camera);
 
@@ -30,7 +30,9 @@ void ArcEditor_OnUpdate()
 
 void ArcEditor_OnRender()
 {
-    RendererDrawMesh(state.mesh);
+    RendererDrawMesh(state.mesh, glm::mat4(1.f));
+    RendererDrawMesh(state.mesh, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
+    RendererDrawMesh(state.mesh, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
 }
 
 void ArcEditor_OnShutdown()

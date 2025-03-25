@@ -18,8 +18,8 @@ namespace Arc
         };
 
         Mesh CreateMesh(Vertex* vertices, u32 vertexCount, u32* indices, u32 indexCount);
+        void UnloadMesh(Mesh& mesh);
         Mesh GenMeshQuad();
         Mesh GenMeshCube();
-        void UnloadMesh(Mesh& mesh);
     }
 }

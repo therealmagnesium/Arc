@@ -33,8 +33,10 @@ namespace Arc
             ASSERT(isSDLLoaded, "Failed to initialize SDL3!");
 
             state.window = Graphics::CreateWindow(config.windowWidth, config.windowHeight, config.name.c_str());
+            RenderCommand::SetViewport(config.windowWidth, config.windowHeight);
 
             state.defaultShader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
+            state.defaultShader.CreateUniform("modelMatrix");
             state.defaultShader.CreateUniform("viewMatrix");
             state.defaultShader.CreateUniform("projectionMatrix");
             state.primaryShader = &state.defaultShader;
@@ -60,6 +62,7 @@ namespace Arc
         void RendererBegin()
         {
             ASSERT(state.primaryCamera != NULL, "The renderer cannot display without a primary camera!");
+            ASSERT(state.primaryShader != NULL, "The renderer cannot display without a primary shader!");
 
             UpdateCamera(*state.primaryCamera);
 
@@ -83,8 +86,10 @@ namespace Arc
             RenderCommand::Clear(r, g, b);
         }
 
-        void RendererDrawMesh(Mesh& mesh)
+        void RendererDrawMesh(Mesh& mesh, const glm::mat4& transform)
         {
+            state.primaryShader->SetMat4("modelMatrix", transform);
+
             mesh.vertexArray.Bind();
             mesh.indexBuffer.Bind();
 

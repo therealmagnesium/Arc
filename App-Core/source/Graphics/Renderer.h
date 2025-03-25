@@ -26,7 +26,7 @@ namespace Arc
         void RendererEnd();
 
         void RendererClear(float r, float g, float b);
-        void RendererDrawMesh(Mesh& mesh);
+        void RendererDrawMesh(Mesh& mesh, const glm::mat4& transform);
 
         void SetPrimaryCamera(Camera* camera);
         void BeginShaderMode(Shader* shader);

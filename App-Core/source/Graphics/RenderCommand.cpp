@@ -19,6 +19,11 @@ namespace Arc
                 glDisableVertexAttribArray(location);
             }
 
+            void SetViewport(u32 width, u32 height)
+            {
+                glViewport(0, 0, width, height);
+            }
+
             void Clear(float r, float g, float b)
             {
                 glClearColor(r, g, b, 1.f);
