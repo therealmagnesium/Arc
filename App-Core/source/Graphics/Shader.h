@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Base.h"
 
+#include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -15,6 +16,11 @@ namespace Arc
 
             void Bind();
             void Unbind();
+            void CreateUniform(const char* name);
+            void SetInt(const char* name, s32 value);
+            void SetFloat(const char* name, float value);
+            void SetVec3(const char* name, const glm::vec3& value);
+            void SetVec4(const char* name, const glm::vec4& value);
         };
 
         Shader LoadShader(const char* vertexPath, const char* fragmentPath);

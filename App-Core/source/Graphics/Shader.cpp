@@ -4,6 +4,7 @@
 #include "Core/IO.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Arc
 {
@@ -32,7 +33,9 @@ namespace Arc
                 ERROR("Failed to compile shader!\n%s", log);
             }
 
-            free(file.data);
+            delete file.data;
+            file.data = NULL;
+
             return targetId;
         }
 
@@ -76,6 +79,43 @@ namespace Arc
         void Shader::Unbind()
         {
             glUseProgram(0);
+        }
+
+        void Shader::CreateUniform(const char* name)
+        {
+            if (uniforms.find(name) != uniforms.end())
+            {
+                WARN("Uniform %s has already been created for shader with id %d", name, id);
+                return;
+            }
+            uniforms[name] = glGetUniformLocation(id, name);
+
+            if (uniforms[name] == -1)
+                WARN("Shader with id %d could not find uniform \"%s\"", id, name);
+        }
+
+        void Shader::SetInt(const char* name, s32 value)
+        {
+            if (uniforms.find(name) != uniforms.end())
+                glUniform1i(uniforms[name], value);
+        }
+
+        void Shader::SetFloat(const char* name, float value)
+        {
+            if (uniforms.find(name) != uniforms.end())
+                glUniform1f(uniforms[name], value);
+        }
+
+        void Shader::SetVec3(const char* name, const glm::vec3& value)
+        {
+            if (uniforms.find(name) != uniforms.end())
+                glUniform3fv(uniforms[name], 1, glm::value_ptr(value));
+        }
+
+        void Shader::SetVec4(const char* name, const glm::vec4& value)
+        {
+            if (uniforms.find(name) != uniforms.end())
+                glUniform4fv(uniforms[name], 1, glm::value_ptr(value));
         }
 
     }

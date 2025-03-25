@@ -1,4 +1,5 @@
 #include "ArcEditor.h"
+#include <glm/glm.hpp>
 
 using namespace Arc;
 using namespace Arc::Core;
@@ -11,7 +12,9 @@ void ArcEditor_OnCreate()
     state.vao = CreateVertexArray();
     state.vbo = CreateVertexBuffer();
     state.ebo = CreateIndexBuffer();
+
     state.shader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
+    state.shader.CreateUniform("tint");
 
     float vertices[] = {
         -0.5f, 0.5f,  0.f, // v0
@@ -43,9 +46,12 @@ void ArcEditor_OnCreate()
 void ArcEditor_OnUpdate()
 {
 }
+
 void ArcEditor_OnRender()
 {
     state.shader.Bind();
+
+    state.shader.SetVec3("tint", glm::vec3(0.2f, 0.6f, 0.8f));
 
     state.vao.Bind();
     state.ebo.Bind();

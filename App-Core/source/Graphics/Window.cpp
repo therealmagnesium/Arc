@@ -1,5 +1,6 @@
 #include "Graphics/Window.h"
 #include "Core/Application.h"
+#include "Core/Input.h"
 #include "Core/Log.h"
 
 #include <SDL3/SDL_events.h>
@@ -42,10 +43,49 @@ namespace Arc
         {
             SDL_Event event;
 
+            for (int i = 0; i < MOUSE_BUTTON_COUNT; i++)
+                Core::Input.mouse.buttonsClicked[i] = false;
+
+            for (int i = 0; i < KEY_COUNT; i++)
+                Core::Input.keyboard.keysPressed[i] = false;
+
             while (SDL_PollEvent(&event))
             {
-                if (event.type == SDL_EVENT_QUIT)
-                    Core::QuitApplication();
+                switch (event.type)
+                {
+                    case SDL_EVENT_QUIT:
+                        Core::QuitApplication();
+                        break;
+
+                    case SDL_EVENT_KEY_DOWN:
+                        Core::Input.keyboard.keysPressed[event.key.scancode] =
+                            !Core::Input.keyboard.keysHeld[event.key.scancode];
+                        Core::Input.keyboard.keysHeld[event.key.scancode] = true;
+                        break;
+
+                    case SDL_EVENT_KEY_UP:
+                        Core::Input.keyboard.keysPressed[event.key.scancode] = false;
+                        Core::Input.keyboard.keysHeld[event.key.scancode] = false;
+                        break;
+
+                    case SDL_EVENT_MOUSE_MOTION:
+                        Core::Input.mouse.position.x = event.motion.x;
+                        Core::Input.mouse.position.y = event.motion.y;
+                        Core::Input.mouse.relative.x = event.motion.xrel;
+                        Core::Input.mouse.relative.y = event.motion.yrel;
+                        break;
+
+                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                        Core::Input.mouse.buttonsClicked[event.button.button] =
+                            !Core::Input.mouse.buttonsHeld[event.button.button];
+                        Core::Input.mouse.buttonsHeld[event.button.button] = true;
+                        break;
+
+                    case SDL_EVENT_MOUSE_BUTTON_UP:
+                        Core::Input.mouse.buttonsClicked[event.button.button] = false;
+                        Core::Input.mouse.buttonsHeld[event.button.button] = false;
+                        break;
+                }
             }
         }
 
