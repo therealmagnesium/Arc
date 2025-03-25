@@ -34,6 +34,9 @@ postbuildcommands({
 })
 
 filter("system:linux")
+postbuildcommands({
+	"cp ../vendor/SDL/lib/linux/* %{cfg.buildtarget.directory}",
+})
 libdirs({
 	"../vendor/glad/lib/linux",
 	"../vendor/SDL/lib/linux",

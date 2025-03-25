@@ -12,7 +12,7 @@
     {                                                                                                                  \
         if (!(expression))                                                                                             \
         {                                                                                                              \
-            FATAL(message, ##__VA_ARGS__);                                                                             \
+            FATAL("%s", message, ##__VA_ARGS__);                                                                       \
             exit(420);                                                                                                 \
         }                                                                                                              \
     }

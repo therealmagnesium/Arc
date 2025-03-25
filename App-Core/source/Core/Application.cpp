@@ -22,7 +22,7 @@ namespace Arc
         {
             if (isInitialized)
             {
-                WARN("Cannot create the application more than once");
+                WARN("%s", "Cannot create the application more than once");
                 return;
             }
 
@@ -38,7 +38,7 @@ namespace Arc
             state.app->OnCreate();
 
             isInitialized = true;
-            INFO("Successfully created the application");
+            INFO("%s", "Successfully created the application");
         }
 
         void RunApplication()
@@ -62,7 +62,7 @@ namespace Arc
 
         void QuitApplication()
         {
-            INFO("Quitting the application...");
+            INFO("%s", "Quitting the application...");
             state.isRunning = false;
         }
     }

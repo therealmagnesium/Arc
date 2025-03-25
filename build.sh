@@ -11,15 +11,15 @@ then
     if [[ $mode = "debug" ]]
     then
         cd "bin/Debug-$system/$appName"
-        ./$appName
+        LD_LIBRARY_PATH="." ./$appName
     elif [[ $mode = "release" ]]
     then
         cd "bin/Release-$system/$appName"
-        ./$appName
+        LD_LIBRARY_PATH="." ./$appName
     elif [[ $mode = "dist" ]]
     then
         cd "bin/Dist-$system/$appName"
-        ./$appName
+        LD_LIBRARY_PATH="." ./$appName
     fi
 elif [[ $config = "assets" ]]
 then
