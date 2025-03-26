@@ -19,6 +19,7 @@ namespace Arc
 
             mesh.vertexArray.SetAttribLoc(0, 3, offsetof(Vertex, position));
             mesh.vertexArray.SetAttribLoc(1, 2, offsetof(Vertex, uvCoord));
+            mesh.vertexArray.SetAttribLoc(2, 3, offsetof(Vertex, normal));
 
             mesh.indexBuffer.Unbind();
             mesh.vertexBuffer.Unbind();
@@ -49,10 +50,10 @@ namespace Arc
         Mesh GenMeshQuad()
         {
             Vertex vertices[4] = {
-                {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec2(0.f, 1.f)},  // v0
-                {glm::vec3(-0.5f, -0.5f, 0.f), glm::vec2(0.f, 0.f)}, // v1
-                {glm::vec3(0.5f, -0.5f, 0.f), glm::vec2(1.f, 0.f)},  // v2
-                {glm::vec3(0.5f, 0.5f, 0.f), glm::vec2(1.f, 1.f)}    // v3
+                {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},  // v0
+                {glm::vec3(-0.5f, -0.5f, 0.f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, 1.f)}, // v1
+                {glm::vec3(0.5f, -0.5f, 0.f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},  // v2
+                {glm::vec3(0.5f, 0.5f, 0.f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, 1.f)}    // v3
             };
 
             u32 indices[6] = {
@@ -68,16 +69,16 @@ namespace Arc
         {
             Vertex vertices[] = {
                 // Front
-                {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 1.f)},  // v0
-                {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f)}, // v1
-                {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f)},  // v2
-                {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f)},   // v3
+                {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},  // v0
+                {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, 1.f)}, // v1
+                {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},  // v2
+                {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},   // v3
 
                 // Back
-                {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f)},  // v0
-                {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f)}, // v1
-                {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 0.f)},  // v2
-                {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f)},   // v3
+                {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},  // v0
+                {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, -1.f)}, // v1
+                {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, -1.f)},  // v2
+                {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},   // v3
             };
 
             u32 indices[] = {
@@ -119,8 +120,10 @@ namespace Arc
 
             glm::vec3 position;
             glm::vec2 uvCoord;
+            glm::vec3 normal;
+
             float xy;
-            // float nx, ny, nz, lengthInv = 1.0f / radius; // vertex normal
+            float lengthInv = 1.0f / radius; // vertex normal
 
             float sectorStep = 2 * M_PI / sectorCount;
             float stackStep = M_PI / stackCount;
@@ -144,14 +147,11 @@ namespace Arc
                     position.y = xy * sinf(sectorAngle); // r * cos(u) * sin(v)
                     vertex.position = position;
 
-                    /*
-                            // normalized vertex normal (nx, ny, nz)
-                            nx = x * lengthInv;
-                            ny = y * lengthInv;
-                            nz = z * lengthInv;
-                            normals.push_back(nx);
-                            normals.push_back(ny);
-                            normals.push_back(nz);*/
+                    // normalized vertex normal (nx, ny, nz)
+                    normal.x = position.x * lengthInv;
+                    normal.y = position.y * lengthInv;
+                    normal.z = position.z * lengthInv;
+                    vertex.normal = normal;
 
                     // vertex tex coord (s, t) range between [0, 1]
                     uvCoord.x = (float)j / sectorCount;

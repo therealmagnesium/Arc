@@ -95,11 +95,13 @@ namespace Arc
 
             RenderCommand::EnableAttribLoc(0);
             RenderCommand::EnableAttribLoc(1);
+            RenderCommand::EnableAttribLoc(2);
 
             RenderCommand::DrawElements(mesh.indices.size());
 
             RenderCommand::DisableAttribLoc(0);
             RenderCommand::DisableAttribLoc(1);
+            RenderCommand::DisableAttribLoc(2);
 
             mesh.indexBuffer.Unbind();
             mesh.vertexArray.Unbind();

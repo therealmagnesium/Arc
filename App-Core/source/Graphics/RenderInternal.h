@@ -10,6 +10,7 @@ namespace Arc
         {
             glm::vec3 position;
             glm::vec2 uvCoord;
+            glm::vec3 normal;
         };
 
         struct VertexArray
