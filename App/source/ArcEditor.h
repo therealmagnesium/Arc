@@ -8,7 +8,8 @@ using namespace Arc::Graphics;
 struct ArcEditorState
 {
     Camera camera;
-    Mesh mesh;
+    Mesh cubeMesh;
+    Mesh sphereMesh;
 };
 
 void ArcEditor_OnCreate();

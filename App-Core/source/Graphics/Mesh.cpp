@@ -110,6 +110,90 @@ namespace Arc
             return mesh;
         }
 
+        Mesh GenMeshSphere(u32 stackCount, u32 sectorCount, float radius)
+        {
+            Mesh mesh;
+            mesh.vertexArray = CreateVertexArray();
+            mesh.vertexBuffer = CreateVertexBuffer();
+            mesh.indexBuffer = CreateIndexBuffer();
+
+            glm::vec3 position;
+            glm::vec2 uvCoord;
+            float xy;
+            // float nx, ny, nz, lengthInv = 1.0f / radius; // vertex normal
+
+            float sectorStep = 2 * M_PI / sectorCount;
+            float stackStep = M_PI / stackCount;
+            float sectorAngle, stackAngle;
+
+            for (int i = 0; i <= stackCount; ++i)
+            {
+                stackAngle = M_PI / 2 - i * stackStep;  // starting from pi/2 to -pi/2
+                xy = radius * cosf(stackAngle);         // r * cos(u)
+                position.z = radius * sinf(stackAngle); // r * sin(u)
+
+                // add (sectorCount+1) vertices per stack
+                // first and last vertices have same position and normal, but different tex coords
+                for (int j = 0; j <= sectorCount; ++j)
+                {
+                    Vertex vertex;
+                    sectorAngle = j * sectorStep; // starting from 0 to 2pi
+
+                    // vertex position (x, y, z)
+                    position.x = xy * cosf(sectorAngle); // r * cos(u) * cos(v)
+                    position.y = xy * sinf(sectorAngle); // r * cos(u) * sin(v)
+                    vertex.position = position;
+
+                    /*
+                            // normalized vertex normal (nx, ny, nz)
+                            nx = x * lengthInv;
+                            ny = y * lengthInv;
+                            nz = z * lengthInv;
+                            normals.push_back(nx);
+                            normals.push_back(ny);
+                            normals.push_back(nz);*/
+
+                    // vertex tex coord (s, t) range between [0, 1]
+                    uvCoord.x = (float)j / sectorCount;
+                    uvCoord.y = (float)i / stackCount;
+                    vertex.uvCoord = uvCoord;
+
+                    mesh.vertices.push_back(vertex);
+                }
+            }
+
+            u32 k1, k2;
+            for (int i = 0; i < stackCount; ++i)
+            {
+                k1 = i * (sectorCount + 1); // beginning of current stack
+                k2 = k1 + sectorCount + 1;  // beginning of next stack
+
+                for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+                {
+                    // 2 triangles per sector excluding first and last stacks
+                    // k1 => k2 => k1+1
+                    if (i != 0)
+                    {
+                        mesh.indices.push_back(k1);
+                        mesh.indices.push_back(k2);
+                        mesh.indices.push_back(k1 + 1);
+                    }
+
+                    // k1+1 => k2 => k2+1
+                    if (i != (stackCount - 1))
+                    {
+                        mesh.indices.push_back(k1 + 1);
+                        mesh.indices.push_back(k2);
+                        mesh.indices.push_back(k2 + 1);
+                    }
+                }
+            }
+
+            PrepareMesh(mesh);
+
+            return mesh;
+        }
+
         void UnloadMesh(Mesh& mesh)
         {
             DestroyIndexBuffer(mesh.indexBuffer);

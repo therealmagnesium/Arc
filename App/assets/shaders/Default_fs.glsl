@@ -6,7 +6,7 @@ out vec4 finalColor;
 
 void main()
 {
-    vec3 color = (fragPosition + vec3(0.5f)) * 1.5f;
+    vec3 color = fragPosition + vec3(0.5f);
     vec3 uvColor = vec3(fragCoord.xy, 1.f);
-    finalColor = vec4(uvColor, 1.f);
+    finalColor = vec4(color, 1.f);
 }

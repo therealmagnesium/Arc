@@ -19,7 +19,8 @@ void ArcEditor_OnCreate()
     state.camera.lookSensitivity = 5.f;
     SetPrimaryCamera(&state.camera);
 
-    state.mesh = GenMeshCube();
+    state.cubeMesh = GenMeshCube();
+    state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
 }
 
 void ArcEditor_OnUpdate()
@@ -30,12 +31,13 @@ void ArcEditor_OnUpdate()
 
 void ArcEditor_OnRender()
 {
-    RendererDrawMesh(state.mesh, glm::mat4(1.f));
-    RendererDrawMesh(state.mesh, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
-    RendererDrawMesh(state.mesh, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
+    RendererDrawMesh(state.cubeMesh, glm::mat4(1.f));
+    RendererDrawMesh(state.cubeMesh, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
+    RendererDrawMesh(state.sphereMesh, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
 }
 
 void ArcEditor_OnShutdown()
 {
-    UnloadMesh(state.mesh);
+    UnloadMesh(state.cubeMesh);
+    UnloadMesh(state.sphereMesh);
 }

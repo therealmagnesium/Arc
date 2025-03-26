@@ -9,10 +9,17 @@ namespace Arc
 {
     namespace Graphics
     {
+        struct ShaderSource
+        {
+            std::string vertexPath;
+            std::string fragmentPath;
+        };
+
         struct Shader
         {
             u32 id = 0;
             std::unordered_map<std::string, s32> uniforms;
+            ShaderSource source;
 
             void Bind();
             void Unbind();

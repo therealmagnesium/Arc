@@ -43,6 +43,8 @@ namespace Arc
         {
             Shader shader;
             shader.id = glCreateProgram();
+            shader.source.vertexPath = vertexPath;
+            shader.source.fragmentPath = fragmentPath;
 
             u32 vertex = CompileShader(GL_VERTEX_SHADER, vertexPath);
             u32 fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentPath);
@@ -62,11 +64,17 @@ namespace Arc
                 return (Shader){};
             }
 
+            INFO("Shader [%s, %s] loaded successfully with id %d", vertexPath, fragmentPath, shader.id);
             return shader;
         }
 
         void UnloadShader(Shader& shader)
         {
+            INFO("Unloading shader [%s, %s]...",     //
+                 shader.source.vertexPath.c_str(),   //
+                 shader.source.fragmentPath.c_str(), //
+                 shader.id);
+
             shader.Unbind();
             glDeleteProgram(shader.id);
         }
