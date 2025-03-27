@@ -6,6 +6,8 @@ in vec3 fragNormal;
 
 out vec4 finalColor;
 
+const float k_ambient = 0.3f;
+
 vec3 Map(vec3 value, float min1, float max1, float min2, float max2) 
 {
     vec3 mappedVec;
@@ -16,10 +18,17 @@ vec3 Map(vec3 value, float min1, float max1, float min2, float max2)
     return mappedVec;
 }
 
+float CalculateDiffuse(vec3 lightPosition, vec3 n)
+{
+    vec3 lightDirection = normalize(lightPosition - fragPosition);
+    float diffuse = max(dot(n, lightDirection), k_ambient);
+
+    return diffuse;
+}
+
 void main()
 {
-    vec3 color = mix(fragPosition + vec3(0.5f), vec3(0.f, 0.87f, 0.92f), 0.4f);
-    vec3 uvColor = vec3(fragCoord.xy, 1.f);
-    vec3 normalColor = Map(fragNormal, -1.f, 1.f, 0.5f, 1.f);
-    finalColor = vec4(color, 1.f); 
+    vec3 normal = normalize(fragNormal);
+    float diffuse = CalculateDiffuse(vec3(0.f, 5.f, 4.f), normal);
+    finalColor = vec4(vec3(0.8f) * diffuse * vec3(1.f, 1.f, 0.92f), 1.f); 
 }

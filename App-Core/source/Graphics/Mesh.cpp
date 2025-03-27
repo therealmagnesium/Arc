@@ -25,6 +25,21 @@ namespace Arc
             mesh.vertexBuffer.Unbind();
             mesh.vertexArray.Unbind();
         }
+        Mesh CreateMesh(Vertex* vertices, u32 vertexCount)
+        {
+            Mesh mesh;
+            mesh.vertexArray = CreateVertexArray();
+            mesh.vertexBuffer = CreateVertexBuffer();
+
+            mesh.vertices.resize(vertexCount);
+
+            for (u32 i = 0; i < vertexCount; i++)
+                mesh.vertices[i] = vertices[i];
+
+            PrepareMesh(mesh);
+
+            return mesh;
+        }
 
         Mesh CreateMesh(Vertex* vertices, u32 vertexCount, u32* indices, u32 indexCount)
         {
@@ -67,47 +82,49 @@ namespace Arc
 
         Mesh GenMeshCube()
         {
-            Vertex vertices[] = {
-                // Front
-                {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},  // v0
-                {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, 1.f)}, // v1
-                {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},  // v2
-                {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},   // v3
+            Vertex vertices[] = {{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, -1.f)},
+                                 {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, -1.f)},
+                                 {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},
+                                 {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},
+                                 {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},
+                                 {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, -1.f)},
 
-                // Back
-                {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},  // v0
-                {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, -1.f)}, // v1
-                {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, -1.f)},  // v2
-                {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, -1.f)},   // v3
-            };
+                                 {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},
+                                 {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},
+                                 {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 0.f, 1.f)},
+                                 {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 0.f, 1.f)},
 
-            u32 indices[] = {
-                // Front
-                0, 1, 2, // i0
-                2, 3, 0, // i1
+                                 {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(-1.f, 0.f, 0.f)},
+                                 {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(-1.f, 0.f, 0.f)},
+                                 {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(-1.f, 0.f, 0.f)},
+                                 {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(-1.f, 0.f, 0.f)},
+                                 {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(-1.f, 0.f, 0.f)},
+                                 {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(-1.f, 0.f, 0.f)},
 
-                // Left
-                0, 4, 5, // i0
-                5, 1, 0, // i1
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(1.f, 0.f, 0.f)},
+                                 {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(1.f, 0.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(1.f, 0.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(1.f, 0.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(1.f, 0.f, 0.f)},
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(1.f, 0.f, 0.f)},
 
-                // Right
-                3, 7, 6, // i0
-                6, 2, 3, // i1
+                                 {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, -1.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, -1.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, -1.f, 0.f)},
+                                 {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, -1.f, 0.f)},
+                                 {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, -1.f, 0.f)},
+                                 {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, -1.f, 0.f)},
 
-                // Back
-                4, 5, 6, // i0
-                6, 7, 4, // i1
+                                 {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.f), glm::vec3(0.f, 1.f, 0.f)},
+                                 {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.f, 1.f), glm::vec3(0.f, 1.f, 0.f)},
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 1.f, 0.f)},
+                                 {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.f, 0.f), glm::vec3(0.f, 1.f, 0.f)},
+                                 {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.f, 0.f), glm::vec3(0.f, 1.f, 0.f)},
+                                 {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.f, 1.), glm::vec3(0.f, 1.f, 0.f)}};
 
-                // Top
-                0, 4, 7, // i0
-                7, 3, 0, // i1
-
-                // Bottom
-                1, 5, 6, // i0
-                6, 2, 1, // i1
-            };
-
-            Mesh mesh = CreateMesh(vertices, LEN(vertices), indices, LEN(indices));
+            Mesh mesh = CreateMesh(vertices, LEN(vertices));
             return mesh;
         }
 

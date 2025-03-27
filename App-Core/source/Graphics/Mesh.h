@@ -17,6 +17,7 @@ namespace Arc
             std::vector<u32> indices;
         };
 
+        Mesh CreateMesh(Vertex* vertices, u32 vertexCount);
         Mesh CreateMesh(Vertex* vertices, u32 vertexCount, u32* indices, u32 indexCount);
         Mesh GenMeshQuad();
         Mesh GenMeshCube();

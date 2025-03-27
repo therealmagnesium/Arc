@@ -39,6 +39,7 @@ namespace Arc
             state.defaultShader.CreateUniform("modelMatrix");
             state.defaultShader.CreateUniform("viewMatrix");
             state.defaultShader.CreateUniform("projectionMatrix");
+            state.defaultShader.CreateUniform("normalMatrix");
             state.primaryShader = &state.defaultShader;
 
             glEnable(GL_DEPTH_TEST);
@@ -88,23 +89,45 @@ namespace Arc
 
         void RendererDrawMesh(Mesh& mesh, const glm::mat4& transform)
         {
+            const glm::mat4 normalMatrix = glm::transpose(glm::inverse(transform));
+
             state.primaryShader->SetMat4("modelMatrix", transform);
+            state.primaryShader->SetMat4("normalMatrix", normalMatrix);
 
-            mesh.vertexArray.Bind();
-            mesh.indexBuffer.Bind();
+            if (mesh.indexBuffer.id != 0)
+            {
+                mesh.vertexArray.Bind();
+                mesh.indexBuffer.Bind();
 
-            RenderCommand::EnableAttribLoc(0);
-            RenderCommand::EnableAttribLoc(1);
-            RenderCommand::EnableAttribLoc(2);
+                RenderCommand::EnableAttribLoc(0);
+                RenderCommand::EnableAttribLoc(1);
+                RenderCommand::EnableAttribLoc(2);
 
-            RenderCommand::DrawElements(mesh.indices.size());
+                RenderCommand::DrawElements(mesh.indices.size());
 
-            RenderCommand::DisableAttribLoc(0);
-            RenderCommand::DisableAttribLoc(1);
-            RenderCommand::DisableAttribLoc(2);
+                RenderCommand::DisableAttribLoc(0);
+                RenderCommand::DisableAttribLoc(1);
+                RenderCommand::DisableAttribLoc(2);
 
-            mesh.indexBuffer.Unbind();
-            mesh.vertexArray.Unbind();
+                mesh.indexBuffer.Unbind();
+                mesh.vertexArray.Unbind();
+            }
+            else
+            {
+                mesh.vertexArray.Bind();
+
+                RenderCommand::EnableAttribLoc(0);
+                RenderCommand::EnableAttribLoc(1);
+                RenderCommand::EnableAttribLoc(2);
+
+                RenderCommand::DrawArrays(mesh.vertices.size());
+
+                RenderCommand::DisableAttribLoc(0);
+                RenderCommand::DisableAttribLoc(1);
+                RenderCommand::DisableAttribLoc(2);
+
+                mesh.vertexArray.Unbind();
+            }
         }
 
         void SetPrimaryCamera(Camera* camera)
