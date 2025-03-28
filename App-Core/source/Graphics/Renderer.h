@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics/Camera.h"
+#include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Window.h"
@@ -26,7 +27,7 @@ namespace Arc
         void RendererEnd();
 
         void RendererClear(float r, float g, float b);
-        void RendererDrawMesh(Mesh& mesh, const glm::mat4& transform);
+        void RendererDrawMesh(Mesh& mesh, Material& material, const glm::mat4& transform);
 
         void SetPrimaryCamera(Camera* camera);
         void BeginShaderMode(Shader* shader);

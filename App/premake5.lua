@@ -19,12 +19,14 @@ includedirs({
 	"../vendor/glm",
 	"../vendor/glad/include",
 	"../vendor/SDL/include",
+	"../vendor/stb_image/include",
 })
 
 links({
 	"App-Core",
 	"glad",
 	"SDL3",
+	"stb_image",
 })
 
 postbuildcommands({
@@ -40,6 +42,7 @@ postbuildcommands({
 libdirs({
 	"../vendor/glad/lib/linux",
 	"../vendor/SDL/lib/linux",
+	"../vendor/stb_image/lib/linux",
 })
 defines({
 	"PLATFORM_LINUX",

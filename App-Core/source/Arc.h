@@ -7,9 +7,11 @@
 #include "Core/Log.h"
 
 #include "Graphics/Camera.h"
+#include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/RenderCommand.h"
 #include "Graphics/RenderInternal.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/Shader.h"
+#include "Graphics/Texture.h"
 #include "Graphics/Window.h"

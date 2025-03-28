@@ -19,17 +19,20 @@ includedirs({
 	"../vendor/glm",
 	"../vendor/glad/include",
 	"../vendor/SDL/include",
+	"../vendor/stb_image/include",
 })
 
 links({
 	"glad",
 	"SDL3",
+	"stb_image",
 })
 
 filter("system:linux")
 libdirs({
 	"../vendor/glad/lib/linux",
 	"../vendor/SDL/lib/linux",
+	"../vendor/stb_image/lib/linux",
 })
 defines({
 	"PLATFORM_LINUX",

@@ -40,6 +40,8 @@ namespace Arc
             state.defaultShader.CreateUniform("viewMatrix");
             state.defaultShader.CreateUniform("projectionMatrix");
             state.defaultShader.CreateUniform("normalMatrix");
+            state.defaultShader.CreateUniform("material.albedo");
+            state.defaultShader.CreateUniform("material.albedoTexture");
             state.primaryShader = &state.defaultShader;
 
             glEnable(GL_DEPTH_TEST);
@@ -87,17 +89,24 @@ namespace Arc
             RenderCommand::Clear(r, g, b);
         }
 
-        void RendererDrawMesh(Mesh& mesh, const glm::mat4& transform)
+        void RendererDrawMesh(Mesh& mesh, Material& material, const glm::mat4& transform)
         {
             const glm::mat4 normalMatrix = glm::transpose(glm::inverse(transform));
 
             state.primaryShader->SetMat4("modelMatrix", transform);
             state.primaryShader->SetMat4("normalMatrix", normalMatrix);
+            state.primaryShader->SetVec3("material.albedo", material.albedo);
+
+            if (material.albedoTexture != NULL)
+                state.primaryShader->SetInt("material.albedoTexture", 0);
 
             if (mesh.indexBuffer.id != 0)
             {
                 mesh.vertexArray.Bind();
                 mesh.indexBuffer.Bind();
+
+                if (material.albedoTexture != NULL)
+                    material.albedoTexture->Bind(0);
 
                 RenderCommand::EnableAttribLoc(0);
                 RenderCommand::EnableAttribLoc(1);
@@ -109,12 +118,18 @@ namespace Arc
                 RenderCommand::DisableAttribLoc(1);
                 RenderCommand::DisableAttribLoc(2);
 
+                if (material.albedoTexture != NULL)
+                    material.albedoTexture->Unbind();
+
                 mesh.indexBuffer.Unbind();
                 mesh.vertexArray.Unbind();
             }
             else
             {
                 mesh.vertexArray.Bind();
+
+                if (material.albedoTexture != NULL)
+                    material.albedoTexture->Bind(0);
 
                 RenderCommand::EnableAttribLoc(0);
                 RenderCommand::EnableAttribLoc(1);
@@ -125,6 +140,9 @@ namespace Arc
                 RenderCommand::DisableAttribLoc(0);
                 RenderCommand::DisableAttribLoc(1);
                 RenderCommand::DisableAttribLoc(2);
+
+                if (material.albedoTexture != NULL)
+                    material.albedoTexture->Unbind();
 
                 mesh.vertexArray.Unbind();
             }

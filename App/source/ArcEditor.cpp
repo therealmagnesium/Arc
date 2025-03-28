@@ -19,6 +19,10 @@ void ArcEditor_OnCreate()
     state.camera.lookSensitivity = 5.f;
     SetPrimaryCamera(&state.camera);
 
+    state.texture = LoadTexture("assets/textures/texel_checker.png", TextureFormat::RGBA);
+    // state.material.albedo = glm::vec3(0.2f, 0.6f, 0.8f);
+    state.material.albedoTexture = &state.texture;
+
     state.cubeMesh = GenMeshCube();
     state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
 }
@@ -31,13 +35,14 @@ void ArcEditor_OnUpdate()
 
 void ArcEditor_OnRender()
 {
-    RendererDrawMesh(state.cubeMesh, glm::mat4(1.f));
-    RendererDrawMesh(state.cubeMesh, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
-    RendererDrawMesh(state.sphereMesh, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
+    RendererDrawMesh(state.cubeMesh, state.material, glm::mat4(1.f));
+    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
+    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
 }
 
 void ArcEditor_OnShutdown()
 {
+    UnloadTexture(state.texture);
     UnloadMesh(state.cubeMesh);
     UnloadMesh(state.sphereMesh);
 }
