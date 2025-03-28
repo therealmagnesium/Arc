@@ -19,12 +19,14 @@ void ArcEditor_OnCreate()
     state.camera.lookSensitivity = 5.f;
     SetPrimaryCamera(&state.camera);
 
-    state.texture = LoadTexture("assets/textures/texel_checker.png", TextureFormat::RGBA);
-    // state.material.albedo = glm::vec3(0.2f, 0.6f, 0.8f);
-    state.material.albedoTexture = &state.texture;
+    state.texture = LoadTexture("assets/textures/small_checker.png", TextureFormat::RGB);
+    state.material.albedo = glm::vec3(0.8f, 0.6f, 0.3f);
+    // state.material.albedoTexture = &state.texture;
 
     state.cubeMesh = GenMeshCube();
     state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
+
+    state.sun = CreateDirectionalLight(glm::vec3(0.5f, -1.f, -0.85f), glm::vec3(1.f, 1.f, 0.9f), 1.f);
 }
 
 void ArcEditor_OnUpdate()
@@ -35,6 +37,8 @@ void ArcEditor_OnUpdate()
 
 void ArcEditor_OnRender()
 {
+    UpdateLightUniforms(state.sun, &Renderer->defaultShader);
+
     RendererDrawMesh(state.cubeMesh, state.material, glm::mat4(1.f));
     RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
     RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));

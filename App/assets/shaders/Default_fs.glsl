@@ -13,14 +13,22 @@ struct Material
     sampler2D albedoTexture; 
 };
 
+struct DirectionalLight
+{
+    vec3 direction;
+    vec3 color;
+    float intensity;
+};
+
 const float k_ambient = 0.3f;
 const vec3 k_v3Zero = vec3(0.f);
 
 uniform Material material;
+uniform DirectionalLight sun;
 
-float CalculateDiffuse(vec3 lightPosition, vec3 n)
+float CalculateDiffuse(vec3 n)
 {
-    vec3 lightDirection = normalize(lightPosition - worldPosition);
+    vec3 lightDirection = normalize(-sun.direction);
     float diffuse = max(dot(n, lightDirection), k_ambient);
 
     return diffuse;
@@ -38,7 +46,7 @@ void main()
 {
     vec3 normal = normalize(fragNormal);
     vec3 albedo = GetAlbedoColor();
-    float diffuse = CalculateDiffuse(vec3(0.f, 4.f, 5.f), normal);
+    float diffuse = CalculateDiffuse(normal);
 
-    finalColor = vec4(albedo * diffuse * vec3(1.f, 1.f, 0.92f), 1.f); 
+    finalColor = vec4(albedo * diffuse * sun.color * sun.intensity, 1.f); 
 }

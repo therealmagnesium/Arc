@@ -12,6 +12,7 @@ struct ArcEditorState
     Mesh cubeMesh;
     Mesh sphereMesh;
     Texture texture;
+    Light sun;
 };
 
 void ArcEditor_OnCreate();

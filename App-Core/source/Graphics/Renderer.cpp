@@ -42,6 +42,9 @@ namespace Arc
             state.defaultShader.CreateUniform("normalMatrix");
             state.defaultShader.CreateUniform("material.albedo");
             state.defaultShader.CreateUniform("material.albedoTexture");
+            state.defaultShader.CreateUniform("sun.direction");
+            state.defaultShader.CreateUniform("sun.color");
+            state.defaultShader.CreateUniform("sun.intensity");
             state.primaryShader = &state.defaultShader;
 
             glEnable(GL_DEPTH_TEST);

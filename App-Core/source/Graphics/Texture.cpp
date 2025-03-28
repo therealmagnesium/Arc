@@ -42,6 +42,7 @@ namespace Arc
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+            stbi_set_flip_vertically_on_load(true);
             texture.data = stbi_load(texture.path.c_str(), (s32*)&texture.width, (s32*)&texture.height,
                                      (s32*)&texture.numChannels, 0);
 
