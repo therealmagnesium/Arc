@@ -9,6 +9,7 @@
 #include <SDL3/SDL.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
+#include <string>
 
 namespace Arc
 {
@@ -17,6 +18,37 @@ namespace Arc
         static RenderState state;
         static bool isInitialized = false;
         RenderState* Renderer = NULL;
+
+        static void LoadDefaultShader()
+        {
+            state.defaultShader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
+            state.defaultShader.CreateUniform("modelMatrix");
+            state.defaultShader.CreateUniform("viewMatrix");
+            state.defaultShader.CreateUniform("projectionMatrix");
+            state.defaultShader.CreateUniform("normalMatrix");
+            state.defaultShader.CreateUniform("material.albedo");
+            state.defaultShader.CreateUniform("material.albedoTexture");
+            state.defaultShader.CreateUniform("sun.direction");
+            state.defaultShader.CreateUniform("sun.color");
+            state.defaultShader.CreateUniform("sun.intensity");
+
+            const u32 maxPointLights = 4;
+            for (u32 i = 0; i < maxPointLights; i++)
+            {
+                state.defaultShader.CreateUniform(("pointLights[" + std::to_string(i) + "].position").c_str());
+                state.defaultShader.CreateUniform(("pointLights[" + std::to_string(i) + "].color").c_str());
+                state.defaultShader.CreateUniform(("pointLights[" + std::to_string(i) + "].intensity").c_str());
+
+                state.defaultShader.CreateUniform(
+                    ("pointLights[" + std::to_string(i) + "].attenuation.constant").c_str());
+                state.defaultShader.CreateUniform(
+                    ("pointLights[" + std::to_string(i) + "].attenuation.linear").c_str());
+                state.defaultShader.CreateUniform(
+                    ("pointLights[" + std::to_string(i) + "].attenuation.quadratic").c_str());
+            }
+
+            state.primaryShader = &state.defaultShader;
+        }
 
         void RendererInit()
         {
@@ -35,19 +67,7 @@ namespace Arc
             state.window = Graphics::CreateWindow(config.windowWidth, config.windowHeight, config.name.c_str());
             RenderCommand::SetViewport(config.windowWidth, config.windowHeight);
 
-            state.defaultShader = LoadShader("assets/shaders/Default_vs.glsl", "assets/shaders/Default_fs.glsl");
-            state.defaultShader.CreateUniform("modelMatrix");
-            state.defaultShader.CreateUniform("viewMatrix");
-            state.defaultShader.CreateUniform("projectionMatrix");
-            state.defaultShader.CreateUniform("normalMatrix");
-            state.defaultShader.CreateUniform("material.albedo");
-            state.defaultShader.CreateUniform("material.albedoTexture");
-            state.defaultShader.CreateUniform("sun.direction");
-            state.defaultShader.CreateUniform("sun.color");
-            state.defaultShader.CreateUniform("sun.intensity");
-            state.primaryShader = &state.defaultShader;
-
-            glEnable(GL_DEPTH_TEST);
+            LoadDefaultShader();
 
             isInitialized = true;
             INFO("%s", "The renderer was successfully initialized");
@@ -160,6 +180,8 @@ namespace Arc
         {
             state.primaryShader = shader;
             state.primaryShader->Bind();
+            state.primaryShader->SetMat4("viewMatrix", state.primaryCamera->view);
+            state.primaryShader->SetMat4("projectionMatrix", state.projection);
         }
 
         void EndShaderMode()

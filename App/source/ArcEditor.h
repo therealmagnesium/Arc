@@ -8,11 +8,17 @@ using namespace Arc::Graphics;
 struct ArcEditorState
 {
     Camera camera;
+    Shader flatColorShader;
+
     Material material;
+    Texture texture;
+
     Mesh cubeMesh;
     Mesh sphereMesh;
-    Texture texture;
-    Light sun;
+    Mesh smallSphereMesh;
+
+    DirectionalLight sun;
+    PointLight lights[4];
 };
 
 void ArcEditor_OnCreate();

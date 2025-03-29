@@ -1,11 +1,11 @@
 #include "Core/Application.h"
 #include "Core/Log.h"
 
-#include "Graphics/RenderCommand.h"
 #include "Graphics/Renderer.h"
 
 #include <glad/glad.h>
 #include <SDL3/SDL_init.h>
+#include <time.h>
 
 namespace Arc
 {
@@ -24,6 +24,7 @@ namespace Arc
             }
 
             App = &state;
+            srand(time(NULL));
 
             state.isRunning = true;
             state.handle = app;

@@ -5,18 +5,7 @@ namespace Arc
 {
     namespace Graphics
     {
-        Light CreateDirectionalLight(const glm::vec3& direction, const glm::vec3& color, float intensity)
-        {
-            Light light;
-            light.direction = direction;
-            light.color = color;
-            light.intensity = intensity;
-            light.type = LightType::Directional;
-
-            return light;
-        }
-
-        void UpdateLightUniforms(Light& light, Shader* shader)
+        void UpdateLightUniforms(DirectionalLight& light, Shader* shader)
         {
             static bool hasLoggedError = false;
             if (shader == NULL)
@@ -29,18 +18,34 @@ namespace Arc
                 return;
             }
 
-            switch (light.type)
-            {
-                case LightType::Directional:
-                    shader->SetVec3("sun.direction", light.direction);
-                    shader->SetVec3("sun.color", light.color);
-                    shader->SetFloat("sun.intensity", light.intensity);
-                    break;
-
-                default:
-                    break;
-            }
+            shader->SetVec3("sun.direction", light.direction);
+            shader->SetVec3("sun.color", light.color);
+            shader->SetFloat("sun.intensity", light.intensity);
         }
 
+        void UpdateLightUniforms(PointLight& light, u32 index, Shader* shader)
+        {
+            static bool hasLoggedError = false;
+            if (shader == NULL)
+            {
+                if (hasLoggedError)
+                {
+                    ERROR("%s", "Cannot update light uniforms because there is a null shader reference!");
+                    hasLoggedError = true;
+                }
+                return;
+            }
+
+            shader->SetVec3(("pointLights[" + std::to_string(index) + "].position").c_str(), light.position);
+            shader->SetVec3(("pointLights[" + std::to_string(index) + "].color").c_str(), light.color);
+            shader->SetFloat(("pointLights[" + std::to_string(index) + "].intensity").c_str(), light.intensity);
+            shader->SetFloat(("pointLights[" + std::to_string(index) + "].attenuation.constant").c_str(),
+                             light.attenuation.constant);
+            shader->SetFloat(("pointLights[" + std::to_string(index) + "].attenuation.linear").c_str(),
+                             light.attenuation.linear);
+            shader->SetFloat(("pointLights[" + std::to_string(index) + "].attenuation.quadratic").c_str(),
+                             light.attenuation.quadratic);
+        }
     }
+
 }

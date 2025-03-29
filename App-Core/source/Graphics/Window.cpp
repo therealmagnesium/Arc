@@ -33,6 +33,8 @@ namespace Arc
 
             gladLoadGL();
 
+            glEnable(GL_DEPTH_TEST);
+
             INFO("Window \"%s\" was successfully created with an OpenGL context", window.title.c_str());
             INFO("GPU vendor: %s", glGetString(GL_VENDOR));
             INFO("GPU specs: %s", glGetString(GL_RENDERER));
