@@ -16,14 +16,16 @@ files({
 
 includedirs({
 	"../App-Core/source",
-	"../vendor/glm",
+	"../vendor/assimp/include",
 	"../vendor/glad/include",
+	"../vendor/glm",
 	"../vendor/SDL/include",
 	"../vendor/stb_image/include",
 })
 
 links({
 	"App-Core",
+	"assimp",
 	"glad",
 	"SDL3",
 	"stb_image",
@@ -37,9 +39,11 @@ postbuildcommands({
 
 filter("system:linux")
 postbuildcommands({
+	"cp ../vendor/assimp/lib/linux/* %{cfg.buildtarget.directory}",
 	"cp ../vendor/SDL/lib/linux/* %{cfg.buildtarget.directory}",
 })
 libdirs({
+	"../vendor/assimp/lib/linux",
 	"../vendor/glad/lib/linux",
 	"../vendor/SDL/lib/linux",
 	"../vendor/stb_image/lib/linux",
