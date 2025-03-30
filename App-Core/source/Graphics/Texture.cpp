@@ -39,7 +39,7 @@ namespace Arc
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             stbi_set_flip_vertically_on_load(true);
@@ -59,18 +59,17 @@ namespace Arc
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
-            INFO("Loaded texture %s successfully with id %d", texture.path.c_str(), texture.id);
+            texture.isValid = true;
+            INFO("Texture \"%s\" loaded successfully with id %d", texture.path.c_str(), texture.id);
             return texture;
         }
 
         void UnloadTexture(Texture& texture)
         {
-            if (texture.id != 0)
-            {
-                INFO("Unloading texture %s...", texture.path.c_str());
-                stbi_image_free(texture.data);
-                glDeleteTextures(1, &texture.id);
-            }
+            INFO("Unloading texture %s...", texture.path.c_str());
+            stbi_image_free(texture.data);
+            glDeleteTextures(1, &texture.id);
+            texture.isValid = false;
         }
 
         void Texture::Bind(u8 slot)

@@ -6,7 +6,7 @@ namespace Arc
     {
         static Material defaultMaterial;
 
-        Material& GetDefaultMaterial()
+        Material GetDefaultMaterial()
         {
             return defaultMaterial;
         }

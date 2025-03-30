@@ -11,11 +11,11 @@ struct ArcEditorState
     Shader flatColorShader;
 
     Material material;
-    Texture texture;
 
     Mesh cubeMesh;
     Mesh sphereMesh;
     Mesh smallSphereMesh;
+    Model model;
 
     DirectionalLight sun;
     PointLight lights[4];

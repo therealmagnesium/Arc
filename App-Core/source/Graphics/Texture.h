@@ -14,6 +14,7 @@ namespace Arc
 
         struct Texture
         {
+            bool isValid = false;
             u32 id = 0;
             u32 width = 0;
             u32 height = 0;

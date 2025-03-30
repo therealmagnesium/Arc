@@ -9,9 +9,9 @@ namespace Arc
         struct Material
         {
             glm::vec3 albedo = glm::vec3(0.8f);
-            Texture* albedoTexture = NULL;
+            Texture albedoTexture;
         };
 
-        Material& GetDefaultMaterial();
+        Material GetDefaultMaterial();
     }
 }

@@ -64,7 +64,9 @@ namespace Arc
             ASSERT(isSDLLoaded, "Failed to initialize SDL3!");
 
             state.window = Graphics::CreateWindow(config.windowWidth, config.windowHeight, config.name.c_str());
+
             RenderCommand::SetViewport(config.windowWidth, config.windowHeight);
+            RenderCommand::SetPolygonMode(RenderPolygonMode::Fill);
 
             LoadDefaultShader();
 
@@ -125,8 +127,7 @@ namespace Arc
                 mesh.vertexArray.Bind();
                 mesh.indexBuffer.Bind();
 
-                if (material.albedoTexture != NULL)
-                    material.albedoTexture->Bind(0);
+                material.albedoTexture.Bind(0);
 
                 RenderCommand::EnableAttribLoc(0);
                 RenderCommand::EnableAttribLoc(1);
@@ -138,8 +139,7 @@ namespace Arc
                 RenderCommand::DisableAttribLoc(1);
                 RenderCommand::DisableAttribLoc(2);
 
-                if (material.albedoTexture != NULL)
-                    material.albedoTexture->Unbind();
+                material.albedoTexture.Unbind();
 
                 mesh.indexBuffer.Unbind();
                 mesh.vertexArray.Unbind();
@@ -148,8 +148,7 @@ namespace Arc
             {
                 mesh.vertexArray.Bind();
 
-                if (material.albedoTexture != NULL)
-                    material.albedoTexture->Bind(0);
+                material.albedoTexture.Bind(0);
 
                 RenderCommand::EnableAttribLoc(0);
                 RenderCommand::EnableAttribLoc(1);
@@ -161,8 +160,7 @@ namespace Arc
                 RenderCommand::DisableAttribLoc(1);
                 RenderCommand::DisableAttribLoc(2);
 
-                if (material.albedoTexture != NULL)
-                    material.albedoTexture->Unbind();
+                material.albedoTexture.Unbind();
 
                 mesh.vertexArray.Unbind();
             }

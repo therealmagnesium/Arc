@@ -30,12 +30,10 @@ void ArcEditor_OnCreate()
 
     LoadFlatColorShader();
 
-    state.texture = LoadTexture("assets/textures/texel_checker.png", TextureFormat::RGBA);
-    state.material.albedoTexture = &state.texture;
-
     state.cubeMesh = GenMeshCube();
     state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
     state.smallSphereMesh = GenMeshSphere(32, 32, 0.2f);
+    state.model = LoadModel("assets/models/fire_flower.obj");
 
     state.sun.direction = glm::vec3(0.5f, -1.f, -0.85f);
     state.sun.color = glm::vec3(1.f, 1.f, 0.9f);
@@ -60,27 +58,47 @@ void ArcEditor_OnUpdate()
 {
     if (IsKeyPressed(KEY_ESCAPE))
         QuitApplication();
+
+    if (IsKeyPressed(KEY_1))
+        ModelSetMaterialIndex(state.model, 1);
+
+    if (IsKeyPressed(KEY_2))
+        ModelSetMaterialIndex(state.model, 2);
+
+    if (IsKeyPressed(KEY_0))
+        ModelSetMaterialIndex(state.model, 0);
+
+    if (IsKeyPressed(KEY_F1))
+        RenderCommand::SetPolygonMode(RenderPolygonMode::Points);
+
+    if (IsKeyPressed(KEY_F2))
+        RenderCommand::SetPolygonMode(RenderPolygonMode::Lines);
+
+    if (IsKeyPressed(KEY_F3))
+        RenderCommand::SetPolygonMode(RenderPolygonMode::Fill);
 }
 
 void ArcEditor_OnRender()
 {
     UpdateLightUniforms(state.sun, &Renderer->defaultShader);
+    RendererDrawModel(state.model, glm::vec3(0.f));
 
     for (u32 i = 0; i < LEN(state.lights); i++)
         UpdateLightUniforms(state.lights[i], i, &Renderer->defaultShader);
 
-    RendererDrawMesh(state.cubeMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(0.f)));
-    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
-    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
+    // RendererDrawMesh(state.cubeMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(0.f)));
+    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(5.f, 0.f, 0.f)));
+    RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(-5.f, 0.f, 0.f)));
 
     BeginShaderMode(&state.flatColorShader);
     for (u32 i = 0; i < LEN(state.lights); i++)
     {
+        Material material;
         glm::vec3& position = state.lights[i].position;
         glm::vec3& tint = state.lights[i].color;
         state.flatColorShader.SetVec3("tint", tint);
 
-        RendererDrawMesh(state.smallSphereMesh, GetDefaultMaterial(), glm::translate(glm::mat4(1.f), position));
+        RendererDrawMesh(state.smallSphereMesh, material, glm::translate(glm::mat4(1.f), position));
     }
     EndShaderMode();
 }
@@ -88,8 +106,8 @@ void ArcEditor_OnRender()
 void ArcEditor_OnShutdown()
 {
     UnloadShader(state.flatColorShader);
-    UnloadTexture(state.texture);
 
+    UnloadModel(state.model);
     UnloadMesh(state.cubeMesh);
     UnloadMesh(state.sphereMesh);
     UnloadMesh(state.smallSphereMesh);

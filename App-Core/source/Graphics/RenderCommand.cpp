@@ -24,6 +24,24 @@ namespace Arc
                 glViewport(0, 0, width, height);
             }
 
+            void SetPolygonMode(RenderPolygonMode mode)
+            {
+                switch (mode)
+                {
+                    case RenderPolygonMode::Fill:
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                        break;
+
+                    case RenderPolygonMode::Lines:
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                        break;
+
+                    case RenderPolygonMode::Points:
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+                        break;
+                }
+            }
+
             void Clear(float r, float g, float b)
             {
                 glClearColor(r, g, b, 1.f);
