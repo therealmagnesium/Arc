@@ -25,6 +25,7 @@ namespace Arc
             mesh.vertexBuffer.Unbind();
             mesh.vertexArray.Unbind();
         }
+
         Mesh CreateMesh(Vertex* vertices, u32 vertexCount)
         {
             Mesh mesh;

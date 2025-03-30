@@ -10,6 +10,7 @@
 #include "Graphics/Light.h"
 #include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
+#include "Graphics/Model.h"
 #include "Graphics/RenderCommand.h"
 #include "Graphics/RenderInternal.h"
 #include "Graphics/Renderer.h"

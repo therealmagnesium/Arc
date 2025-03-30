@@ -32,8 +32,7 @@ namespace Arc
             state.defaultShader.CreateUniform("sun.color");
             state.defaultShader.CreateUniform("sun.intensity");
 
-            const u32 maxPointLights = 4;
-            for (u32 i = 0; i < maxPointLights; i++)
+            for (u32 i = 0; i < state.maxPointLights; i++)
             {
                 state.defaultShader.CreateUniform(("pointLights[" + std::to_string(i) + "].position").c_str());
                 state.defaultShader.CreateUniform(("pointLights[" + std::to_string(i) + "].color").c_str());
@@ -119,9 +118,7 @@ namespace Arc
             state.primaryShader->SetMat4("modelMatrix", transform);
             state.primaryShader->SetMat4("normalMatrix", normalMatrix);
             state.primaryShader->SetVec3("material.albedo", material.albedo);
-
-            if (material.albedoTexture != NULL)
-                state.primaryShader->SetInt("material.albedoTexture", 0);
+            state.primaryShader->SetInt("material.albedoTexture", 0);
 
             if (mesh.indexBuffer.id != 0)
             {
@@ -168,6 +165,23 @@ namespace Arc
                     material.albedoTexture->Unbind();
 
                 mesh.vertexArray.Unbind();
+            }
+        }
+
+        void RendererDrawModel(Model& model, const glm::vec3& position, const glm::vec3& rotation,
+                               const glm::vec3& scale)
+        {
+            model.transform = glm::mat4(1.f);
+            model.transform = glm::translate(model.transform, position);
+            model.transform = glm::rotate(model.transform, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f));
+            model.transform = glm::rotate(model.transform, glm::radians(rotation.x), glm::vec3(0.f, 1.f, 0.f));
+            model.transform = glm::rotate(model.transform, glm::radians(rotation.x), glm::vec3(0.f, 0.f, 1.f));
+            model.transform = glm::scale(model.transform, scale);
+
+            for (u32 i = 0; i < model.meshes.size(); i++)
+            {
+                Mesh& mesh = model.meshes[i];
+                RendererDrawMesh(mesh, model.materials[mesh.materialIndex], model.transform);
             }
         }
 

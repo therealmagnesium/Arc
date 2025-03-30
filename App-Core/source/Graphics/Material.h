@@ -11,5 +11,7 @@ namespace Arc
             glm::vec3 albedo = glm::vec3(0.8f);
             Texture* albedoTexture = NULL;
         };
+
+        Material& GetDefaultMaterial();
     }
 }

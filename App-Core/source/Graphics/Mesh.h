@@ -10,6 +10,7 @@ namespace Arc
     {
         struct Mesh
         {
+            u32 materialIndex = 0;
             VertexArray vertexArray;
             VertexBuffer vertexBuffer;
             IndexBuffer indexBuffer;

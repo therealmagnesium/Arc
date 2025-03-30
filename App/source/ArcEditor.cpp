@@ -31,8 +31,7 @@ void ArcEditor_OnCreate()
     LoadFlatColorShader();
 
     state.texture = LoadTexture("assets/textures/texel_checker.png", TextureFormat::RGBA);
-    state.material.albedo = glm::vec3(0.7f);
-    // state.material.albedoTexture = &state.texture;
+    state.material.albedoTexture = &state.texture;
 
     state.cubeMesh = GenMeshCube();
     state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
@@ -81,7 +80,7 @@ void ArcEditor_OnRender()
         glm::vec3& tint = state.lights[i].color;
         state.flatColorShader.SetVec3("tint", tint);
 
-        RendererDrawMesh(state.smallSphereMesh, state.material, glm::translate(glm::mat4(1.f), position));
+        RendererDrawMesh(state.smallSphereMesh, GetDefaultMaterial(), glm::translate(glm::mat4(1.f), position));
     }
     EndShaderMode();
 }
