@@ -11,6 +11,7 @@ namespace Arc
     namespace Graphics
     {
         static const u32 loadFlags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices;
+        static std::vector<Texture> loadedTextures;
 
         void ProcessNode(Model& model, aiNode* node, const aiScene* scene);
         Mesh ProcessMesh(Model& model, aiMesh* aMesh, const aiScene* scene);
@@ -31,9 +32,7 @@ namespace Arc
             }
 
             model.meshes.reserve(scene->mNumMeshes);
-
             model.materials.resize(scene->mNumMaterials);
-            model.materials[0] = GetDefaultMaterial();
 
             ProcessNode(model, scene->mRootNode, scene);
 
@@ -49,7 +48,10 @@ namespace Arc
                 UnloadMesh(mesh);
 
             for (Material& material : model.materials)
-                UnloadTexture(material.albedoTexture);
+            {
+                if (material.albedoTexture.isValid)
+                    UnloadTexture(material.albedoTexture);
+            }
         }
 
         void ModelSetMaterialIndex(Model& model, u32 materialIndex)
@@ -111,7 +113,7 @@ namespace Arc
                     indices.push_back(face.mIndices[j]);
             }
 
-            for (u32 i = 1; i < scene->mNumMaterials; i++)
+            for (u32 i = 0; i < scene->mNumMaterials; i++)
             {
                 Material& material = model.materials[i];
                 aiMaterial* aMaterial = scene->mMaterials[i];
@@ -124,11 +126,28 @@ namespace Arc
                     material.albedo.z = albedo.b;
                 }
 
+                bool skipLoading = false;
                 aiString aAlbedoTexturePath;
                 aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aAlbedoTexturePath);
 
                 std::string albedoTexturePath = model.directory + aAlbedoTexturePath.C_Str();
-                material.albedoTexture = LoadTexture(albedoTexturePath.c_str(), TextureFormat::RGBA);
+
+                for (u32 j = 0; j < loadedTextures.size(); j++)
+                {
+                    if (std::strcmp(loadedTextures[j].path.c_str(), albedoTexturePath.c_str()) == 0)
+                    {
+                        material.albedoTexture = loadedTextures[j];
+                        skipLoading = true;
+                        break;
+                    }
+                }
+
+                if (!skipLoading && albedoTexturePath.size() > model.directory.size() + 3)
+                {
+                    Texture albedoTexture = LoadTexture(albedoTexturePath.c_str(), TextureFormat::RGBA);
+                    material.albedoTexture = albedoTexture;
+                    loadedTextures.push_back(albedoTexture);
+                }
             }
 
             Mesh mesh = CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());

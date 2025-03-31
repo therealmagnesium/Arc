@@ -19,7 +19,7 @@ static void LoadFlatColorShader()
 
 void ArcEditor_OnCreate()
 {
-    SetClearColor(0.1f, 0.1f, 0.1f);
+    SetClearColor(0.07f, 0.07f, 0.07f);
 
     state.camera.position = glm::vec3(0.f, 0.f, 3.f);
     state.camera.target = glm::vec3(0.f);
@@ -86,7 +86,7 @@ void ArcEditor_OnRender()
     for (u32 i = 0; i < LEN(state.lights); i++)
         UpdateLightUniforms(state.lights[i], i, &Renderer->defaultShader);
 
-    // RendererDrawMesh(state.cubeMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(0.f)));
+    RendererDrawMesh(state.cubeMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -3.f)));
     RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(5.f, 0.f, 0.f)));
     RendererDrawMesh(state.sphereMesh, state.material, glm::translate(glm::mat4(1.f), glm::vec3(-5.f, 0.f, 0.f)));
 

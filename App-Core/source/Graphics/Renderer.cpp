@@ -179,6 +179,8 @@ namespace Arc
             for (u32 i = 0; i < model.meshes.size(); i++)
             {
                 Mesh& mesh = model.meshes[i];
+                ASSERT(mesh.materialIndex <= model.materials.size(),
+                       "Model \"%s\" has an invalid material index of %d!", model.path.c_str(), mesh.materialIndex);
                 RendererDrawMesh(mesh, model.materials[mesh.materialIndex], model.transform);
             }
         }
