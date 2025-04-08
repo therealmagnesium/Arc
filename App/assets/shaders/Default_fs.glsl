@@ -43,10 +43,10 @@ uniform Material material;
 uniform DirectionalLight sun;
 uniform PointLight pointLights[k_maxPointLights];
 
-vec3 GetAlbedoColor()
+vec4 GetAlbedoColor()
 {
-    vec3 texel = texture(material.albedoTexture, fragCoord).xyz;
-    vec3 albedo = (all(equal(texel, k_v3Zero))) ? material.albedo : material.albedo * texel;
+    vec4 texel = texture(material.albedoTexture, fragCoord);
+    vec4 albedo = (all(equal(texel.xyz, k_v3Zero))) ? vec4(material.albedo, 1.f) : vec4(material.albedo, 1.f) * texel;
 
     return albedo;
 }
@@ -58,18 +58,18 @@ float CalculateDiffuse(vec3 n, vec3 lightDirection)
 }
 
 
-vec3 CalculateDirectionalLight(vec3 n)
+vec4 CalculateDirectionalLight(vec3 n)
 {
     vec3 lightDirection = normalize(-sun.direction);
     vec3 sunColor = sun.color * sun.intensity;
-    vec3 albedo = GetAlbedoColor();
+    vec4 albedo = GetAlbedoColor();
     float diffuse = CalculateDiffuse(n, lightDirection);
-    vec3 result = albedo * diffuse * sunColor;
+    vec4 result = albedo * diffuse * vec4(sunColor, 1.f);
 
-    return max(result, vec3(0.f));
+    return max(result, vec4(0.f, 0.f, 0.f, 1.f));
 }
 
-vec3 CalculatePointLight(vec3 n, PointLight light)
+vec4 CalculatePointLight(vec3 n, PointLight light)
 {
     vec3 lightDirection = normalize(light.position - worldPosition);
     vec3 lightColor = light.color * light.intensity;
@@ -77,20 +77,20 @@ vec3 CalculatePointLight(vec3 n, PointLight light)
     float distance = length(light.position - worldPosition);
     float attenuation = 1.f / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * pow(distance, 2.f));
 
-    vec3 albedo = GetAlbedoColor();
+    vec4 albedo = GetAlbedoColor();
     float diffuse = CalculateDiffuse(n, lightDirection);
 
-    vec3 result = albedo * diffuse * lightColor * attenuation;
-    return max(result, vec3(0.f));
+    vec4 result = albedo * diffuse * vec4(lightColor, 1.f) * attenuation;
+    return max(result, vec4(0.f, 0.f, 0.f, 1.f));
 }
 
 void main()
 {
     vec3 normal = normalize(fragNormal);
-    vec3 result = CalculateDirectionalLight(normal);
+    vec4 result = CalculateDirectionalLight(normal);
 
     for (int i = 0; i < k_maxPointLights; i++)
         result += CalculatePointLight(normal, pointLights[i]);
 
-    finalColor = vec4(result, 1.f); 
+    finalColor = result; 
 }

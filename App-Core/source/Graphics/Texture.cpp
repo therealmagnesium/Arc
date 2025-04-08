@@ -53,7 +53,7 @@ namespace Arc
             }
 
             u32 glFormat = TextureFormatToU32(texture.format);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width, texture.height, 0, glFormat, GL_UNSIGNED_BYTE,
+            glTexImage2D(GL_TEXTURE_2D, 0, glFormat, texture.width, texture.height, 0, glFormat, GL_UNSIGNED_BYTE,
                          texture.data);
             glGenerateMipmap(GL_TEXTURE_2D);
 

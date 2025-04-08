@@ -25,7 +25,7 @@ void ArcEditor_OnCreate()
     state.camera.target = glm::vec3(0.f);
     state.camera.up = glm::vec3(0.f, 1.f, 0.f);
     state.camera.moveSpeed = 0.25f;
-    state.camera.lookSensitivity = 5.f;
+    state.camera.lookSensitivity = 3.f;
     SetPrimaryCamera(&state.camera);
 
     LoadFlatColorShader();
@@ -33,7 +33,10 @@ void ArcEditor_OnCreate()
     state.cubeMesh = GenMeshCube();
     state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
     state.smallSphereMesh = GenMeshSphere(32, 32, 0.2f);
+    state.quadMesh = GenMeshQuad();
     state.model = LoadModel("assets/models/fire_flower.obj");
+
+    // state.quadMaterial.albedoTexture = LoadTexture("assets/models/Book.png", TextureFormat::RGBA);
 
     state.sun.direction = glm::vec3(0.5f, -1.f, -0.85f);
     state.sun.color = glm::vec3(1.f, 1.f, 0.9f);
@@ -93,12 +96,12 @@ void ArcEditor_OnRender()
     BeginShaderMode(&state.flatColorShader);
     for (u32 i = 0; i < LEN(state.lights); i++)
     {
-        Material material;
+        Material lightMaterial;
         glm::vec3& position = state.lights[i].position;
         glm::vec3& tint = state.lights[i].color;
         state.flatColorShader.SetVec3("tint", tint);
 
-        RendererDrawMesh(state.smallSphereMesh, material, glm::translate(glm::mat4(1.f), position));
+        RendererDrawMesh(state.smallSphereMesh, lightMaterial, glm::translate(glm::mat4(1.f), position));
     }
     EndShaderMode();
 }
@@ -106,9 +109,11 @@ void ArcEditor_OnRender()
 void ArcEditor_OnShutdown()
 {
     UnloadShader(state.flatColorShader);
+    // UnloadTexture(state.quadMaterial.albedoTexture);
 
     UnloadModel(state.model);
     UnloadMesh(state.cubeMesh);
+    UnloadMesh(state.quadMesh);
     UnloadMesh(state.sphereMesh);
     UnloadMesh(state.smallSphereMesh);
 }

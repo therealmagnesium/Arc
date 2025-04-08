@@ -19,9 +19,18 @@ namespace Arc
                 glDisableVertexAttribArray(location);
             }
 
-            void SetViewport(u32 width, u32 height)
+            void CullFace(RenderFace face)
             {
-                glViewport(0, 0, width, height);
+                switch (face)
+                {
+                    case RenderFace::Front:
+                        glCullFace(GL_FRONT);
+                        break;
+
+                    case RenderFace::Back:
+                        glCullFace(GL_BACK);
+                        break;
+                }
             }
 
             void SetPolygonMode(RenderPolygonMode mode)
@@ -40,6 +49,11 @@ namespace Arc
                         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
                         break;
                 }
+            }
+
+            void SetViewport(u32 width, u32 height)
+            {
+                glViewport(0, 0, width, height);
             }
 
             void Clear(float r, float g, float b)
