@@ -7,6 +7,7 @@
 #include "Core/Log.h"
 
 #include "Graphics/Camera.h"
+#include "Graphics/Framebuffer.h"
 #include "Graphics/Light.h"
 #include "Graphics/Material.h"
 #include "Graphics/Mesh.h"

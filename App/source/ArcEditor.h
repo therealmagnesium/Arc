@@ -8,6 +8,7 @@ using namespace Arc::Graphics;
 struct ArcEditorState
 {
     Camera camera;
+    Framebuffer framebuffer;
     Shader flatColorShader;
 
     Material material;

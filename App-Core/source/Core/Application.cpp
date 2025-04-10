@@ -32,7 +32,7 @@ namespace Arc
             Graphics::RendererInit();
 
             isInitialized = true;
-            INFO("%s", "Successfully created the application");
+            INFO("%s", "The application was initialized successfully");
         }
 
         void RunApplication()

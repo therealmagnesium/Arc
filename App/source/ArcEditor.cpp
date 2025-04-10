@@ -17,27 +17,24 @@ static void LoadFlatColorShader()
     state.flatColorShader.CreateUniform("tint");
 }
 
-void ArcEditor_OnCreate()
+static void SetupFramebuffer()
 {
-    SetClearColor(0.07f, 0.07f, 0.07f);
+    const ApplicationConfig& appInfo = GetApplicationInfo();
+    state.framebuffer = CreateFramebuffer(2);
+    state.framebuffer.Bind();
+    state.framebuffer.attachments[0] = Framebuffer::CreateAttachment(FB_ATTACHMENT_COLOR, 
+                                                                     appInfo.windowWidth, 
+                                                                     appInfo.windowHeight);
 
-    state.camera.position = glm::vec3(0.f, 0.f, 3.f);
-    state.camera.target = glm::vec3(0.f);
-    state.camera.up = glm::vec3(0.f, 1.f, 0.f);
-    state.camera.moveSpeed = 0.25f;
-    state.camera.lookSensitivity = 3.f;
-    SetPrimaryCamera(&state.camera);
+    state.framebuffer.attachments[1] = Framebuffer::CreateAttachment(FB_ATTACHMENT_DEPTH_STENCIL, 
+                                                                     appInfo.windowWidth, 
+                                                                     appInfo.windowHeight);
+    state.framebuffer.Unbind();
+    ValidateFramebuffer(state.framebuffer);
+}
 
-    LoadFlatColorShader();
-
-    state.cubeMesh = GenMeshCube();
-    state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
-    state.smallSphereMesh = GenMeshSphere(32, 32, 0.2f);
-    state.quadMesh = GenMeshQuad();
-    state.model = LoadModel("assets/models/fire_flower.obj");
-
-    // state.quadMaterial.albedoTexture = LoadTexture("assets/models/Book.png", TextureFormat::RGBA);
-
+static void SetupLights()
+{
     state.sun.direction = glm::vec3(0.5f, -1.f, -0.85f);
     state.sun.color = glm::vec3(1.f, 1.f, 0.9f);
 
@@ -55,6 +52,32 @@ void ArcEditor_OnCreate()
         light.attenuation.linear = 0.09f;
         light.attenuation.quadratic = 0.032f;
     }
+}
+
+void ArcEditor_OnCreate()
+{
+    const ApplicationConfig& appInfo = GetApplicationInfo();
+    SetClearColor(0.07f, 0.07f, 0.07f);
+
+    state.camera.position = glm::vec3(0.f, 0.f, 3.f);
+    state.camera.target = glm::vec3(0.f);
+    state.camera.up = glm::vec3(0.f, 1.f, 0.f);
+    state.camera.moveSpeed = 0.25f;
+    state.camera.lookSensitivity = 3.f;
+    SetPrimaryCamera(&state.camera);
+
+    SetupFramebuffer();
+    LoadFlatColorShader();
+
+    state.cubeMesh = GenMeshCube();
+    state.sphereMesh = GenMeshSphere(32, 32, 0.5f);
+    state.smallSphereMesh = GenMeshSphere(32, 32, 0.2f);
+    state.quadMesh = GenMeshQuad();
+    state.model = LoadModel("assets/models/fire_flower.obj");
+
+    SetupLights();
+
+    // state.quadMaterial.albedoTexture = LoadTexture("assets/models/Book.png", TextureFormat::RGBA);
 }
 
 void ArcEditor_OnUpdate()
@@ -108,6 +131,8 @@ void ArcEditor_OnRender()
 
 void ArcEditor_OnShutdown()
 {
+    DestroyFramebuffer(state.framebuffer);
+
     UnloadShader(state.flatColorShader);
     // UnloadTexture(state.quadMaterial.albedoTexture);
 
