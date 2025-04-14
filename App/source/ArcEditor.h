@@ -27,4 +27,5 @@ struct ArcEditorState
 void ArcEditor_OnCreate();
 void ArcEditor_OnUpdate();
 void ArcEditor_OnRender();
+void ArcEditor_OnRenderUI();
 void ArcEditor_OnShutdown();

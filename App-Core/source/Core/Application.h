@@ -1,6 +1,5 @@
 #pragma once
 #include "Core/Base.h"
-#include "Graphics/Window.h"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -24,6 +23,7 @@ namespace Arc
             void (*OnCreate)() = NULL;
             void (*OnUpdate)() = NULL;
             void (*OnRender)() = NULL;
+            void (*OnRenderUI)() = NULL;
             void (*OnShutdown)() = NULL;
         };
 

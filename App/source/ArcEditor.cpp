@@ -1,6 +1,8 @@
 #include "ArcEditor.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui.h>
 
 using namespace Arc;
 using namespace Arc::Core;
@@ -20,6 +22,7 @@ static void LoadFlatColorShader()
 static void SetupFramebuffer()
 {
     const ApplicationConfig& appInfo = GetApplicationInfo();
+
     state.framebuffer = CreateFramebuffer(2);
     state.framebuffer.Bind();
     state.framebuffer.attachments[0] = Framebuffer::CreateAttachment(FB_ATTACHMENT_COLOR, 
@@ -106,6 +109,9 @@ void ArcEditor_OnUpdate()
 
 void ArcEditor_OnRender()
 {
+    state.framebuffer.Bind();
+    RendererClear(V3_OPEN(App->clearColor));
+
     UpdateLightUniforms(state.sun, &Renderer->defaultShader);
     RendererDrawModel(state.model, glm::vec3(0.f));
 
@@ -127,6 +133,16 @@ void ArcEditor_OnRender()
         RendererDrawMesh(state.smallSphereMesh, lightMaterial, glm::translate(glm::mat4(1.f), position));
     }
     EndShaderMode();
+
+    state.framebuffer.Unbind();
+}
+
+void ArcEditor_OnRenderUI()
+{
+    ImGui::DockSpaceOverViewport();
+    ImGui::Begin("Viewport");
+    ImGui::Image((ImTextureID)state.framebuffer.attachments[0].id, ImVec2(1600, 900), ImVec2(0,1), ImVec2(1, 0));
+    ImGui::End();
 }
 
 void ArcEditor_OnShutdown()

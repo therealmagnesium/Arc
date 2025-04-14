@@ -2,6 +2,7 @@
 #include "Core/Log.h"
 
 #include "Graphics/Renderer.h"
+#include "UI/UI.h"
 
 #include <glad/glad.h>
 #include <SDL3/SDL_init.h>
@@ -30,6 +31,7 @@ namespace Arc
             state.handle = app;
 
             Graphics::RendererInit();
+            UI::SetupContext();
 
             isInitialized = true;
             INFO("%s", "The application was initialized successfully");
@@ -45,16 +47,23 @@ namespace Arc
 
                 state.handle->OnUpdate();
 
+                UI::BeginFrome();
+                state.handle->OnRenderUI();
+                UI::EndFrame();
+
                 Graphics::RendererBegin();
 
-                Graphics::RendererClear(V3_OPEN(state.clearColor));
                 state.handle->OnRender();
+
+                Graphics::RendererClear(V3_OPEN(state.clearColor));
+                UI::Display();
 
                 Graphics::RendererEnd();
             }
 
             state.handle->OnShutdown();
             Graphics::RendererShutdown();
+            UI::DestroyContext();
         }
 
         void QuitApplication()

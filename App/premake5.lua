@@ -19,6 +19,7 @@ includedirs({
 	"../vendor/assimp/include",
 	"../vendor/glad/include",
 	"../vendor/glm",
+	"../vendor/imgui/include",
 	"../vendor/SDL/include",
 	"../vendor/stb_image/include",
 })
@@ -27,6 +28,7 @@ links({
 	"App-Core",
 	"assimp",
 	"glad",
+	"imgui",
 	"SDL3",
 	"stb_image",
 })
@@ -45,6 +47,7 @@ postbuildcommands({
 libdirs({
 	"../vendor/assimp/lib/linux",
 	"../vendor/glad/lib/linux",
+	"../vendor/imgui/lib/linux",
 	"../vendor/SDL/lib/linux",
 	"../vendor/stb_image/lib/linux",
 })

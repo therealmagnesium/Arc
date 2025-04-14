@@ -19,6 +19,7 @@ includedirs({
     "../vendor/assimp/include",
     "../vendor/glad/include",
     "../vendor/glm",
+    "../vendor/imgui/include",
     "../vendor/SDL/include",
     "../vendor/stb_image/include",
 })
@@ -26,6 +27,7 @@ includedirs({
 links({
     "assimp",
     "glad",
+    "imgui",
     "SDL3",
     "stb_image",
 })
@@ -34,6 +36,7 @@ filter("system:linux")
 libdirs({
     "../vendor/assimp/lib/linux",
     "../vendor/glad/lib/linux",
+    "../vendor/imgui/lib/linux",
     "../vendor/SDL/lib/linux",
     "../vendor/stb_image/lib/linux",
 })

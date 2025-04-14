@@ -16,5 +16,6 @@ void ARC_EntryPoint(Application* app)
     app->OnCreate = ArcEditor_OnCreate;
     app->OnUpdate = ArcEditor_OnUpdate;
     app->OnRender = ArcEditor_OnRender;
+    app->OnRenderUI = ArcEditor_OnRenderUI;
     app->OnShutdown = ArcEditor_OnShutdown;
 }
